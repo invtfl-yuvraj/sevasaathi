@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Header from "@/components/ui/Header";
+import Header from "@/components/Header";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -13,3 +13,4 @@ const layout = ({ children }: { children: ReactNode }) => {
 };
 
 export default layout;
+
