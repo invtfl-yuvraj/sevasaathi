@@ -27,6 +27,7 @@ model User {
   // Relations
 
   workers  Worker[]
+  admin Admin? @relation()
   bookings Booking[]
   ratings  Rating[]
   messages Message[]
@@ -50,10 +51,24 @@ model Worker {
   service      Service   @relation(fields: [ServiceId], references: [id])
   bookings     Booking[]
   ratings      Rating[]
-  locationData Location?
-  messages     Message
-  userId       String?
+  locationData Location? 
+  messages     Message[]
 }
+
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String   
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+
+  workers Worker[]
+  bookings Booking[]
+}
+
 
 model Booking {
   id     String  @id @default(uuid())
@@ -62,7 +77,7 @@ model Booking {
 }
 
 model Rating {
-  id     String  @id @default(uuid())
+  id     Int   @id @default(autoincrement())
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
 }
@@ -80,14 +95,5 @@ enum Role {
 }
 
 
-model Service {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  // Relations
 
-  workers Worker[]
-}
