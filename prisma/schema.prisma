@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?  @unique
+  imageURL  String?
+  rating    Float    @default(0)
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  workers          Worker[]
+  admin            Admin?
+  bookings         Booking[]
+  ratings          Rating[]
+  payments         Payment[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+model Worker {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  serviceId    String?
+  availability Boolean  @default(false)
+  experience   Int
+  hourlyRate   Float
+  location     String
+  rating       Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service      Service?  @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  bookings     Booking[]
+  ratings      Rating[]
+  locationData Location?
+  messages     Message[]
+}
+
+model Admin {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  // Permissions
+  permissions Json @default("{}")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  workers  Worker[]
+  bookings Booking[]
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  userId      String
+  workerId    String?
+  serviceId   String?
+  status      BookingStatus @default(PENDING)
+  amount      Float
+  paymentId   String?
+  scheduledAt DateTime
+  completedAt DateTime?
+  createdAt   DateTime      @default(now())
+
+  // Relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  worker  Worker?  @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  payment Payment?
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  userId        String
+  bookingId     String        @unique
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  transactionId String        @unique
+  createdAt     DateTime      @default(now())
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  userId    String
+  workerId  String
+  rating    Float
+  review    String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  workerId  String   @unique
+  latitude  Float
+  longitude Float
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  workerId   String?
+  content    String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  sender   User    @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User    @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  worker   Worker? @relation(fields: [workerId], references: [id], onDelete: SetNull)
+}
+
+enum Role {
+  USER
+  WORKER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
