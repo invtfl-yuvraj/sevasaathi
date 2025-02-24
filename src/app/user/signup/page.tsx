@@ -24,7 +24,7 @@ const page = () => {
           </div>
 
           <div className="mt-[-22px]">
-            <h3 className="text-base font-medium mb-2">Enter your email</h3>
+            <h3 className="text-base font-medium mb-2">Enter your Email</h3>
             <input
               required
               className="text-lg  w-full border-none py-2  rounded  bg-[#eeeeee] placeholder:text-base px-4 mb-10"
@@ -34,7 +34,7 @@ const page = () => {
           </div>
 
           <div className="mt-[-20px]">
-            <h3 className="text-base font-medium mb-2">Enter your password</h3>
+            <h3 className="text-base font-medium mb-2">Enter your Password</h3>
             <input
               required
               className="text-lg  w-full border-none py-2 rounded  bg-[#eeeeee] placeholder:text-base px-4 mb-7"
@@ -50,7 +50,7 @@ const page = () => {
 
         <p className="text-center">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600">
+          <Link href="/user/login" className="text-lightpurple">
             Login Here
           </Link>
         </p>
