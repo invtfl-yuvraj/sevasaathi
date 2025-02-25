@@ -1,5 +1,9 @@
 import React, { ReactNode } from "react";
 import Header from "@/components/Header";
+import 'remixicon/fonts/remixicon.css'
+
+
+
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
