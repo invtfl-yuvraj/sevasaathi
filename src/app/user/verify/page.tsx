@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 
 const Page = () => {
   const [otp, setOtp] = useState(["", "", "", "","",""]);
@@ -28,7 +29,7 @@ const Page = () => {
    * @param {number} index - The index of the OTP input field
    * @param {object} event - The keyboard event object
    */
-  
+
   const handleKeyDown = (index, event) => {
     if (event.key === "Backspace" && !otp[index] && index > 0) {
       document.getElementById(`otp-${index - 1}`).focus();
@@ -63,9 +64,11 @@ const Page = () => {
       </div>
 
       {/* Login Button */}
-      <button className="bg-lightpurple text-white font-medium rounded-lg w-full h-10 transition-all duration-200">
-        Login
-      </button>
+      <Link href="/user/dashboard" className="w-full">
+          <button className="bg-lightpurple text-white font-medium rounded-lg w-full h-10 transition-all duration-200">
+            Login
+          </button>
+      </Link>
     </div>
   );
 };
