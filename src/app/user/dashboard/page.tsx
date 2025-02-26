@@ -86,24 +86,32 @@ const page = () => {
 
           {/* For Partners */}
 
-          <div></div>
+        <div>
 
-          {/* company */}
-          <div></div>
+        </div>
+
+        {/* company */}
+        <div>
+
+        </div>
 
           {/* legal */}
 
-          <div></div>
+        <div>
+
         </div>
+      </div>
 
         <div className="fixed h-16 w-full bottom-0 left-0 right-0 z-10">
           <ButtonNavigation />
         </div>
 
-        <div>
-          <DashboardFooter />
-        </div>
+      <div>
+        <DashboardFooter/>
       </div>
+
+     
+    </div>
     </>
   );
 };

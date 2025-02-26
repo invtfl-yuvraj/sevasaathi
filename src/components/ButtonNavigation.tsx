@@ -11,7 +11,7 @@ import { FaRegCircleUser, FaCircleUser } from "react-icons/fa6";
 const ButtonNavigation = () => {
   const [isVisible, setIsVisible] = React.useState(true);
   const navRef = useRef<HTMLDivElement | null>(null);
-  const lastScrollY = useRef(window.scrollY);
+  const lastScrollY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -42,12 +42,14 @@ const ButtonNavigation = () => {
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-
-      {/* Home section */}
-
-      <button className="h-full w-full flex justify-center items-center">
-        {/* <TbHome className="text-gray-400 text-3xl" /> */}
-        <TbHomeFilled className="text-lightpurple text-3xl"/>
+      {/* Home Icon */}
+      <button>
+        <Image
+          src="/Icon/home_icon.png"
+          alt="Home Icon"
+          height={24}
+          width={24}
+        />
       </button>
 
       {/* Service section */}

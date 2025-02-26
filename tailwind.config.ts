@@ -25,6 +25,8 @@ export default {
         acrepair:"#FFBC99",
         painting:"#B5EBCD",
         appliance:"#B1E5FC",
+        otpblock:"#79747E",
+        verifytext:"#757575",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
