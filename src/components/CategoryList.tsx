@@ -3,7 +3,7 @@ import SearchBar from "./SearchBar";
 
 const CategoryList = () => {
   return <div>
-    <SearchBar/>
+    {/* <SearchBar/> */}
   </div>;
 };
 

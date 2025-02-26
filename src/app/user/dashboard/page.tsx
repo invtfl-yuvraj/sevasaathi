@@ -42,9 +42,9 @@ const page = () => {
         <ServiceCategoryList />
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
-          <div className="h-full w-full flex gap-2">
-            <div className="h-6 w-1 rounded-xl bg-[#FFA3A3]"></div>
-            <h2 className="">Most Booked Services</h2>
+          <div className="h-full w-full flex items-center gap-2">
+            <div className="h-8 w-1 rounded-xl bg-[#FFA3A3]"></div>
+            <h2 className="text-xl font-bold">Most Booked Services</h2>
           </div>
 
           <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
@@ -59,9 +59,9 @@ const page = () => {
         </div>
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
-          <div className="h-full w-full flex gap-2">
-            <div className="h-6 w-1 rounded-xl bg-[#A3B2FF]"></div>
-            <h2 className="">Our Top Partners</h2>
+          <div className="h-full w-full flex items-center gap-2">
+            <div className="h-8 w-1 rounded-xl bg-[#A3B2FF]"></div>
+            <h2 className="text-xl font-bold">Our Top Partners</h2>
           </div>
 
           <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
