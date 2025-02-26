@@ -1,13 +1,20 @@
 import React from "react";
 import SearchBar from "@/components/SearchBar";
+import { FaArrowLeft } from "react-icons/fa6";
 
 const page = () => {
-  const searchPlaceholder = "Search what you need...";
+  const searchPlaceholder = "Search Category";
 
   return (
-    <div className="bg-gray-100 w-full flex flex-col justify-between gap-2">
-      <div className="bg-white px-6 py-4 w-full rounded-b-lg">
-        <SearchBar searchPlaceholder={searchPlaceholder} />
+    <div className="p-4">
+      <div className="flex justify-between items-center gap-2 py-4 px-6">
+          <FaArrowLeft />
+          <SearchBar searchPlaceholder={searchPlaceholder} />
+      </div>
+
+
+      <div>
+        
       </div>
     </div>
   );
