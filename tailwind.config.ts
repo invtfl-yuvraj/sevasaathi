@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 
+
 export default {
   darkMode: ["class"],
   content: [
@@ -9,10 +10,21 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)'],
+        mono: ['var(--font-roboto-mono)'],
+      },
       colors: {
       whitecolor:"FCFCFC",
         lightgray: "#EFEFEF",
         lightpurple: "#6759FF",
+        locationcolor:"#636A75",
+        dashboardfontcolor:"#172B4D",
+        bgsearch:"#FBFBFB",
+        bordersearch:"#F2F2F2",
+        acrepair:"#FFBC99",
+        painting:"#B5EBCD",
+        appliance:"#B1E5FC",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

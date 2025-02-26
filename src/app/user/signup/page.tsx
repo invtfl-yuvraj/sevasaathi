@@ -1,7 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
+
 const page = () => {
+  const [fullname, setFullName] = React.useState("");
   return (
     <div className="p-7">
       <div>
@@ -12,7 +14,7 @@ const page = () => {
 
       <div className="mt-[10%]">
         <form>
-          <h3 className="text-base font-medium mb-2">Enter your Full Name</h3>
+          <h3 className="text-base font-medium mb-2" >Enter your Full Name</h3>
 
           <div className="flex gap-3 mb-5">
             <input
@@ -20,6 +22,10 @@ const page = () => {
               className="text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base mb-7 px-4"
               type="text"
               placeholder="Full Name"
+              value={fullname}
+              onChange={(e) => {
+                setFullName(e.target.value);
+              }}
             />
           </div>
 
