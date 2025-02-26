@@ -27,6 +27,10 @@ export default {
         appliance:"#B1E5FC",
         otpblock:"#79747E",
         verifytext:"#757575",
+        cleaning:"#FFD88D",
+        plumbing:"#CBEBA4",
+        electronics:"#FB9B9B",
+        shifting:"#F8B0ED",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
