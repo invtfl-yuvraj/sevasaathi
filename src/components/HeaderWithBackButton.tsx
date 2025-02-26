@@ -1,7 +1,11 @@
 import React from "react";
 import BackButton from "@/components/BackButton";
 
-function HeaderWithBackButton({title}) {
+interface Props {
+  title: string;
+}
+
+function HeaderWithBackButton({title}: Props) {
   return (
     <div className="w-full flex flex-col gap-6">
       <BackButton />
