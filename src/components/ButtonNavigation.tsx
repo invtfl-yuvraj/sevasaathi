@@ -4,14 +4,22 @@ import Image from "next/image";
 import { useRef } from "react";
 import { TbHome, TbHomeFilled } from "react-icons/tb";
 import { RiFileList3Fill, RiFileList3Line } from "react-icons/ri";
-import {  VscBell , VscBellDot } from "react-icons/vsc";
-import { MdChat, MdOutlineChat, MdMarkUnreadChatAlt, MdOutlineMarkUnreadChatAlt } from "react-icons/md";
+import { VscBell, VscBellDot } from "react-icons/vsc";
+import {
+  MdChat,
+  MdOutlineChat,
+  MdMarkUnreadChatAlt,
+  MdOutlineMarkUnreadChatAlt,
+} from "react-icons/md";
 import { FaRegCircleUser, FaCircleUser } from "react-icons/fa6";
+import { GoHome } from "react-icons/go";
 
 const ButtonNavigation = () => {
   const [isVisible, setIsVisible] = React.useState(true);
   const navRef = useRef<HTMLDivElement | null>(null);
-  const lastScrollY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
+  const lastScrollY = useRef(
+    typeof window !== "undefined" ? window.scrollY : 0
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -42,14 +50,11 @@ const ButtonNavigation = () => {
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      {/* Home Icon */}
-      <button>
-        <Image
-          src="/Icon/home_icon.png"
-          alt="Home Icon"
-          height={24}
-          width={24}
-        />
+      {/* Home section */}
+
+      <button className="h-full w-full flex justify-center items-center">
+        {/* <TbHome className="text-gray-400 text-3xl" /> */}
+        <TbHomeFilled className="text-lightpurple text-3xl"/>
       </button>
 
       {/* Service section */}
@@ -62,8 +67,8 @@ const ButtonNavigation = () => {
       {/* Notification section */}
 
       <button className="h-full w-full flex justify-center items-center">
-      <VscBell className="text-gray-400 text-3xl" />
-      {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
+        <VscBell className="text-gray-400 text-3xl" />
+        {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
       </button>
 
       {/* Message section */}
@@ -77,10 +82,9 @@ const ButtonNavigation = () => {
 
       {/* User section */}
 
-
       <button className="h-full w-full flex justify-center items-center">
-      <FaRegCircleUser className="text-gray-400 text-3xl"/>
-      {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
+        <FaRegCircleUser className="text-gray-400 text-3xl" />
+        {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
       </button>
     </div>
   );
