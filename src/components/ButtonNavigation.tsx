@@ -2,6 +2,11 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRef } from "react";
+import { TbHome, TbHomeFilled } from "react-icons/tb";
+import { RiFileList3Fill, RiFileList3Line } from "react-icons/ri";
+import {  VscBell , VscBellDot } from "react-icons/vsc";
+import { MdChat, MdOutlineChat, MdMarkUnreadChatAlt, MdOutlineMarkUnreadChatAlt } from "react-icons/md";
+import { FaRegCircleUser, FaCircleUser } from "react-icons/fa6";
 
 const ButtonNavigation = () => {
   const [isVisible, setIsVisible] = React.useState(true);
@@ -33,52 +38,50 @@ const ButtonNavigation = () => {
   return (
     <div
       ref={navRef}
-      className="flex justify-around items-center"
-      style={{ display: isVisible ? "flex" : "none" }}
+      className={`h-full w-full flex justify-evenly items-center bg-white transition-opacity duration-200 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
     >
-      {/* Home Icon */}
-      <button>
-        <Image
-          src="/Icon/Home.png"
-          alt="Home Icon"
-          height={24}
-          width={24}
-        />
+
+      {/* Home section */}
+
+      <button className="h-full w-full flex justify-center items-center">
+        {/* <TbHome className="text-gray-400 text-3xl" /> */}
+        <TbHomeFilled className="text-lightpurple text-3xl"/>
       </button>
 
-      {/* Bookings */}
-      <button>
-        <Image
-          src="/Icon/bookings_icon.png"
-          alt="Bookings Icon"
-          height={24}
-          width={24}
-        />
+      {/* Service section */}
+
+      <button className="h-full w-full flex justify-center items-center">
+        <RiFileList3Line className="text-gray-400 text-3xl" />
+        {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}
       </button>
 
-      {/* Notifications Icon */}
-      <button>
-        <Image
-          src="/Icon/notification_icon.png"
-          alt="Notifications Icon"
-          height={24}
-          width={24}
-        />
+      {/* Notification section */}
+
+      <button className="h-full w-full flex justify-center items-center">
+      <VscBell className="text-gray-400 text-3xl" />
+      {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
       </button>
 
-      {/* Menu Icon */}
-      <button>
-        <Image
-          src="/Icon/component_icon.png"
-          alt="Menu Icon"
-          height={24}
-          width={24}
-        />
+      {/* Message section */}
+
+      {/* <button className="h-full w-full flex justify-center items-center">
+      <MdOutlineChat />
+      <MdChat />
+      <MdMarkUnreadChatAlt />
+      <MdOutlineMarkUnreadChatAlt />
+      </button> */}
+
+      {/* User section */}
+
+
+      <button className="h-full w-full flex justify-center items-center">
+      <FaRegCircleUser className="text-gray-400 text-3xl"/>
+      {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
       </button>
     </div>
   );
 };
 
 export default ButtonNavigation;
-
-

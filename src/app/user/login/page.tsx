@@ -9,7 +9,7 @@ const page = () => {
       </div>
 
       <div className="mt-[10%]">
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" action="/user/dashboard">
           <div className="flex flex-col gap-2">
             <h3 className="font-medium text-base">Email</h3>
             <input
@@ -85,7 +85,7 @@ const page = () => {
           </Link>
           <p className="text-center">
             Create an Account{" "}
-            <Link href="/user-signup" className="text-lightpurple">
+            <Link href="/user/signup" className="text-lightpurple">
               Sign Up
             </Link>
           </p>

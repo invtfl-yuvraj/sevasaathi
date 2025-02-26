@@ -16,7 +16,7 @@ const DashboardHeader = () => {
       </div>
 
       <div className="w-full flex justify-end">
-        <Link href="/">
+        <Link href="/user/login">
           <button className="border-2 p-2 border-gray-400 rounded-2xl">Login</button>
         </Link>
       </div>
