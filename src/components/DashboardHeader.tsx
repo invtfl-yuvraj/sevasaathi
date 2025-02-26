@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const DashboardHeader = () => {
   return (
-    <div className="flex justify-start items-center gap-4 p-4">
+    <div className="flex justify-start items-center gap-4 ">
       <div>
         <i className="ri-menu-line text-2xl font-semibold"></i>
       </div>
