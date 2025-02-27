@@ -9,7 +9,7 @@ const page = () => {
       </div>
 
       <div className="mt-[10%]">
-        <form className="flex flex-col gap-4" action="/user/dashboard">
+        <form className="flex flex-col gap-4" action="/user/verify">
           <div className="flex flex-col gap-2">
             <h3 className="font-medium text-base">Email</h3>
             <input

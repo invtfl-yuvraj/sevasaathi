@@ -15,7 +15,7 @@ const page = () => {
       </div>
 
       <div className="mt-[10%]">
-        <form>
+        <form action="/user/verify">
           <h3 className="text-base font-medium mb-2" >Enter your Full Name</h3>
 
           <div className="flex gap-3 mb-5">
