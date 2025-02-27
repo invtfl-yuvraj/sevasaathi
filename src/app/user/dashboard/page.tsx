@@ -8,7 +8,6 @@ import ItemCard from "@/components/ItemCard";
 import ServiceCategoryList from "@/components/ServiceCategoryList";
 import ButtonNavigation from "@/components/ButtonNavigation";
 import DashboardFooter from "@/components/DashboardFooter";
-import Head from "next/head";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,12 +19,6 @@ const page = () => {
 
   return (
     <>
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
-      </Head>
 
       <div className="bg-gray-100 w-full flex flex-col justify-between gap-2">
         <div className="bg-white px-6 flex flex-col justify-between py-4 gap-2 h-full w-full rounded-b-lg">
@@ -48,13 +41,13 @@ const page = () => {
           </div>
 
           <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
+            <ItemCard maintitle="Plumbing" subtitle="₹500" bg="bg-green1" />
+            <ItemCard maintitle="AC repair" subtitle="₹400" bg="bg-green1" />
+            <ItemCard maintitle="Painting" subtitle="₹600" bg="bg-green1" />
+            <ItemCard maintitle="Wiring" subtitle="₹500" bg="bg-green1" />
+            <ItemCard maintitle="Electrician" subtitle="₹500" bg="bg-green1" />
+            <ItemCard maintitle="Kitchen" subtitle="₹500" bg="bg-green1" />
+
           </div>
         </div>
 
@@ -65,13 +58,14 @@ const page = () => {
           </div>
 
           <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
-            <ItemCard />
+          <ItemCard maintitle="Yuvraj" subtitle="⭐️ 4.85" bg="bg-lightpurple" />
+          <ItemCard maintitle="Bharti" subtitle="⭐️ 4.84" bg="bg-lightpurple" />
+          <ItemCard maintitle="Harsh" subtitle="⭐️ 4.84" bg="bg-lightpurple" />
+          <ItemCard maintitle="Srijan" subtitle="⭐️ 4.83" bg="bg-lightpurple" />
+          <ItemCard maintitle="Pranay" subtitle="⭐️ 4.81" bg="bg-lightpurple" />
+          <ItemCard maintitle="Ankit" subtitle="⭐️ 4.80" bg="bg-lightpurple" />
+          <ItemCard maintitle="Anirudh" subtitle="⭐️ 4.79" bg="bg-lightpurple" />
+          <ItemCard maintitle="Himanshu" subtitle="⭐️ 4.78" bg="bg-lightpurple" />
           </div>
         </div>
 

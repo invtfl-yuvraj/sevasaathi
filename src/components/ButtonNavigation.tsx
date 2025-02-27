@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { FaRegCircleUser, FaCircleUser } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
+import Link from "next/link";
 
 const ButtonNavigation = () => {
   const [isVisible, setIsVisible] = React.useState(true);
@@ -52,24 +53,30 @@ const ButtonNavigation = () => {
     >
       {/* Home section */}
 
-      <button className="h-full w-full flex justify-center items-center">
-        {/* <TbHome className="text-gray-400 text-3xl" /> */}
-        <TbHomeFilled className="text-lightpurple text-3xl"/>
-      </button>
+      <Link href="/user/dashboard">
+
+        <button className="h-full w-full flex justify-center items-center">
+          {/* <TbHome className="text-gray-400 text-3xl" /> */}
+          <TbHomeFilled className="text-lightpurple text-3xl" />
+        </button>
+      </Link>
 
       {/* Service section */}
 
+      <Link href="/user/dashboard/bookings">
       <button className="h-full w-full flex justify-center items-center">
         <RiFileList3Line className="text-gray-400 text-3xl" />
         {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}
       </button>
+      </Link>
 
       {/* Notification section */}
-
+      <Link href="/user/dashboard/notifications">
       <button className="h-full w-full flex justify-center items-center">
         <VscBell className="text-gray-400 text-3xl" />
         {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
       </button>
+      </Link>
 
       {/* Message section */}
 
@@ -81,11 +88,12 @@ const ButtonNavigation = () => {
       </button> */}
 
       {/* User section */}
-
+      <Link href="/user/dashboard/profile">
       <button className="h-full w-full flex justify-center items-center">
         <FaRegCircleUser className="text-gray-400 text-3xl" />
         {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
       </button>
+      </Link>
     </div>
   );
 };

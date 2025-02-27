@@ -29,7 +29,7 @@ const ServiceCategoryList = () => {
       height={24}
       width={24}
     />
-    <Link href="">
+    <Link href="/user/dashboard/category">
       <ServiceCategoryCard
         iconSrc={"/Icon/right_arrow.png"}
         bgColor={"#ECECEC"}
