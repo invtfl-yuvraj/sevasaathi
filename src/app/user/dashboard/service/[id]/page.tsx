@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import React, { useState, useCallback } from "react";
 import ServiceAddCard from "@/components/ServiceAddCard";
 import HeaderWithBackButton from "@/components/HeaderWithBackButton";
@@ -35,18 +35,23 @@ const page = () => {
         <ServiceAddCard id="card4" onItemCountChange={handleItemCountChange} />
       </div>
       {totalItemCount >0 && (
-        <div className="fixed right-2 p-8 top-8  font-bold">
+        <div className="fixed top-0 right-0 left-0 p-4 bg-white shadow-sm z-50 font-bold flex justify-end">
+        <div className="mr-4">
           <p>Total Items: {totalItemCount}</p>
           <p className="text-green-600">Total Price: ₹{totalItemCount * 299}</p>
         </div>
+      </div>
+      
       )}
 
       {totalItemCount > 0 && (
         <div className="flex mt-10 items-center justify-center">
-          <button className="border-2 py-2 px-6 border-lightpurple bg-lightpurple text-white rounded-2xl flex gap-4 font-bold">
-            {" "}
-            Proceed to Checkout
-          </button>
+          <Link href='/schedule'>
+            <button className="border-2 py-2 px-6 border-lightpurple bg-lightpurple text-white rounded-2xl flex gap-4 font-bold">
+              {" "}
+              Proceed to Checkout
+            </button>
+          </Link>
         </div>
       )}
 
