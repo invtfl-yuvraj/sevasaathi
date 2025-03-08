@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import CaptainMobile from "@/components/CaptainMobile";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -28,9 +29,11 @@ const Page = () => {
       <div className="h-full w-full flex justify-center flex-col gap-2 px-6 py-4">
         <h4>Enter a Mobile Number</h4>
         <CaptainMobile/>
-        <button className="w-full h-full bg-[#6759FF] text-white mt-12 border-none rounded-lg placeholder:text-base flex flex-col justify-center items-center text-base py-2 ">
-          Send Request
-        </button>
+        <Link href='/captain/signup'>
+          <button className="w-full h-full bg-[#6759FF] text-white mt-12 border-none rounded-lg placeholder:text-base flex flex-col justify-center items-center text-base py-2 ">
+            Send Request
+          </button>
+        </Link>
       </div>
     </>
   );
