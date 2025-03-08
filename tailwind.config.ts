@@ -32,8 +32,10 @@ export default {
         plumbing:"#CBEBA4",
         electronics:"#FB9B9B",
         shifting:"#F8B0ED",
+        
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+       
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
