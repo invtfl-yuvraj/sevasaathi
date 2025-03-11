@@ -1,6 +1,5 @@
 import type { Config } from "tailwindcss";
 
-
 export default {
   darkMode: ["class"],
   content: [
@@ -11,31 +10,37 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        mono: ['var(--font-roboto-mono)'],
+        sans: ["var(--font-inter)"],
+        mono: ["var(--font-roboto-mono)"],
       },
       colors: {
-      whitecolor:"FCFCFC",
+        whitecolor: "FCFCFC",
         lightgray: "#EFEFEF",
         lightpurple: "#6759FF",
-        locationcolor:"#636A75",
-        dashboardfontcolor:"#172B4D",
-        bgsearch:"#FBFBFB",
-        bordersearch:"#F2F2F2",
-        acrepair:"#FFBC99",
-        green1:"#D5F4ED",
-        green2:"#B5EBCD",
-        appliance:"#B1E5FC",
-        otpblock:"#79747E",
-        verifytext:"#757575",
-        cleaning:"#FFD88D",
-        plumbing:"#CBEBA4",
-        electronics:"#FB9B9B",
-        shifting:"#F8B0ED",
-        
+        locationcolor: "#636A75",
+        dashboardfontcolor: "#172B4D",
+        bgsearch: "#FBFBFB",
+        bordersearch: "#F2F2F2",
+        acrepair: "#FFBC99",
+        green1: "#D5F4ED",
+        green2: "#B5EBCD",
+        appliance: "#B1E5FC",
+        otpblock: "#79747E",
+        verifytext: "#757575",
+        cleaning: "#FFD88D",
+        plumbing: "#CBEBA4",
+        electronics: "#FB9B9B",
+        shifting: "#F8B0ED",
+        lightpeach: "#FFE8E8",
+        lemonyellow: "#C0BD7F",
+        lightyellow: "#FFFBE4",
+        textgray: "#6F767E",
+        lightgreen:"#83DD83",
+        lightred:"#F19797",
+
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-       
+
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
