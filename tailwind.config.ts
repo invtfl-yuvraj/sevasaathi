@@ -38,6 +38,8 @@ export default {
         lightgreen: "#83DD83",
         lightred: "#F19797",
         green: "#1CC052",
+        purple: "#934DFB",
+
 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

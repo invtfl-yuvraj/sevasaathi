@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { TbHome, TbHomeFilled } from "react-icons/tb";
 import { MdOutlinePayments } from "react-icons/md";
 import { VscBell, VscBellDot } from "react-icons/vsc";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import {
   MdChat,
   MdOutlineChat,
@@ -54,7 +55,6 @@ const CaptainButtonNavigation = () => {
       {/* Home section */}
 
       <Link href="">
-
         <button className="h-full w-full flex justify-center items-center">
           {/* <TbHome className="text-gray-400 text-3xl" /> */}
           <TbHomeFilled className="text-gray-400 text-3xl hover:text-lightpurple transition duration-300" />
@@ -64,18 +64,18 @@ const CaptainButtonNavigation = () => {
       {/* Payment section */}
 
       <Link href="/captain/payment">
-      <button className="h-full w-full flex justify-center items-center">
-        <MdOutlinePayments  className="text-gray-400 text-3xl  hover:text-lightpurple transition duration-300" />
-        {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}
-      </button>
+        <button className="h-full w-full flex justify-center items-center">
+          <MdOutlinePayments className="text-gray-400 text-3xl  hover:text-lightpurple transition duration-300" />
+          {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}
+        </button>
       </Link>
 
       {/* Notification section */}
-      <Link href="">
-      <button className="h-full w-full flex justify-center items-center">
-        <VscBell className="text-gray-400 text-3xl" />
-        {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
-      </button>
+      <Link href="/captain/shop">
+        <button className="h-full w-full flex justify-center items-center">
+          <HiOutlineShoppingBag className="text-gray-400 text-3xl" />
+          {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
+        </button>
       </Link>
 
       {/* Message section */}
@@ -88,11 +88,11 @@ const CaptainButtonNavigation = () => {
       </button> */}
 
       {/* User section */}
-      <Link href="">
-      <button className="h-full w-full flex justify-center items-center">
-        <FaRegCircleUser className="text-gray-400 text-3xl" />
-        {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
-      </button>
+      <Link href="/captain/profile">
+        <button className="h-full w-full flex justify-center items-center">
+          <FaRegCircleUser className="text-gray-400 text-3xl" />
+          {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
+        </button>
       </Link>
     </div>
   );

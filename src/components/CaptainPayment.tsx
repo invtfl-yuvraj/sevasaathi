@@ -17,7 +17,7 @@ const CaptainPayment: React.FC<Props> = ({ title }) => {
         <p className="text-gray-500">Total Earnings</p>
       </div>
 
-      <div className="flex justify-between items-center px-4 py-4">
+      <div className="flex justify-between items-center px-4 py-8">
         <div className="flex flex-col gap-2">
           <h2 className="font-bold text-xl">14 February 2025</h2>
           <p className="text-base text-gray-500">Pipe Cleaning</p>
