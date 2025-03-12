@@ -6,6 +6,8 @@ import { TbHome, TbHomeFilled } from "react-icons/tb";
 import { MdOutlinePayments } from "react-icons/md";
 import { VscBell, VscBellDot } from "react-icons/vsc";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { LuWallet } from "react-icons/lu";
+
 import {
   MdChat,
   MdOutlineChat,
@@ -65,7 +67,7 @@ const CaptainButtonNavigation = () => {
 
       <Link href="/captain/payment">
         <button className="h-full w-full flex justify-center items-center">
-          <MdOutlinePayments className="text-gray-400 text-3xl  hover:text-lightpurple transition duration-300" />
+          <LuWallet className="text-gray-400 text-3xl  hover:text-lightpurple transition duration-300" />
           {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}
         </button>
       </Link>
