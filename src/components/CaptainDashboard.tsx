@@ -5,7 +5,7 @@ import Image from "next/image";
 function CaptainDashboard() {
   return (
     <div>
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col gap-6 py-10">
         <Image
           src="/Icon/upcoming_order.png"
           height={80}

@@ -35,8 +35,9 @@ export default {
         lemonyellow: "#C0BD7F",
         lightyellow: "#FFFBE4",
         textgray: "#6F767E",
-        lightgreen:"#83DD83",
-        lightred:"#F19797",
+        lightgreen: "#83DD83",
+        lightred: "#F19797",
+        green: "#1CC052",
 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

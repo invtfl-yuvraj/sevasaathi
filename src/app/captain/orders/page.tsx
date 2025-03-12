@@ -3,6 +3,8 @@ import CaptainHeader from "@/components/CaptainHeader";
 import ButtonNavigation from "@/components/ButtonNavigation";
 import Image from "next/image";
 import CaptainOrders from "@/components/CaptainOrders";
+import CaptainButtonNavigation from "@/components/CaptainButtonNavigation";
+
 function page() {
   return (
     <div className="h-screen w-full bg-gray-100 px-6 py-6">
@@ -15,7 +17,7 @@ function page() {
 
       
       <div className="fixed h-16 w-full bottom-0 left-0 right-0 z-10">
-        <ButtonNavigation />
+      <CaptainButtonNavigation />
       </div>
     </div>
   );
