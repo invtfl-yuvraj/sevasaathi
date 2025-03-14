@@ -3,10 +3,9 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRef } from "react";
 import { TbHome, TbHomeFilled } from "react-icons/tb";
-import { MdOutlinePayments } from "react-icons/md";
-import { VscBell, VscBellDot } from "react-icons/vsc";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { LuWallet } from "react-icons/lu";
+import { GrLocation } from "react-icons/gr";
 
 import {
   MdChat,
