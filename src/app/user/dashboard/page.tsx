@@ -20,7 +20,7 @@ const page = () => {
   return (
     <>
 
-      <div className="bg-gray-100 w-full flex flex-col justify-between gap-2">
+      <div className="bg-gray-100 w-full flex flex-col justify-between gap-2 z-1">
         <div className="bg-white px-6 flex flex-col justify-between py-4 gap-2 h-full w-full rounded-b-lg">
           <DashboardHeader />
           <header className="mt-4 flex flex-col justify-between gap-2">
