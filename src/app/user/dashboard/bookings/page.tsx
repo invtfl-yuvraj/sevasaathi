@@ -4,7 +4,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="h-full w-full flex flex-col justify-between gap-4">
+    <div className="h-full w-full flex flex-col justify-between gap-4 p-4">
       <HeaderWithBackButton title="Bookings" />
 
       <div className="h-full w-full flex gap-4 justify-around items-center">

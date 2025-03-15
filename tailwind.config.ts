@@ -43,6 +43,7 @@ export default {
         gray:"#6F767E",
         peach:"#FFBC99",
         lightgreenA:"#B5E4CA",
+        grayA:"#757575",
 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
