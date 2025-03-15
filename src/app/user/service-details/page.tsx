@@ -1,8 +1,12 @@
-import React from "react";
-import UnitsCount from "./UnitsCount";
+"use client";
 import { MdOutlineLink, MdOutlineKeyboardVoice } from "react-icons/md";
+import { useRouter } from "next/navigation";
+import React from "react";
+import UnitsCount from "@/components/UnitsCount";
+import Link from "next/link";
 
-function ServiceDetails() {
+function page() {
+  const router = useRouter();
   return (
     <div className="h-screen w-full py-6 px-4 bg-gray-100">
       {/* Service Details Section */}
@@ -54,17 +58,25 @@ function ServiceDetails() {
       <div className=" py-4 bg-white rounded-xl shadow-md mt-4 p-4">
         <h3 className="text-lg text-gray-400">Total Cost: Rs 10</h3>
 
-        <div className="flex justify-between gap-2 mt-10">
-          <button className="h-full w-full px-4 py-4 bg-white text-black rounded-xl shadow-md font-bold border-2 border-gray-300 tracking-wide text-xl">
-            Add More
-          </button>
-          <button className="h-full w-full px-4 py-4 bg-lightpurple text-white rounded-xl shadow-md font-bold border-2 border-gray-300 tracking-wide text-xl">
-            Book Now
-          </button>
+        <div className="flex justify-between  gap-2 mt-10">
+          <Link href="/">
+            <button className="h-full w-full px-4 py-4 bg-white text-black rounded-xl shadow-md font-bold border-2 border-gray-300 tracking-wide text-xl">
+              Add More
+            </button>
+          </Link>
+
+          <Link href="/user/service-details/schedule">
+            <button
+              className="h-full w-full px-4 py-4 bg-lightpurple text-white rounded-xl shadow-md font-bold border-2 border-gray-300 tracking-wide text-xl"
+              
+            >
+              Book Now
+            </button>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
 
-export default ServiceDetails;
+export default page;
