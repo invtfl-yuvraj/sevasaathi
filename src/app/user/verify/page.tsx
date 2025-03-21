@@ -11,7 +11,10 @@ const page: React.FC = () => {
    * @param {number} index - The index of the OTP input field
    * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event
    */
-  const handleChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = event.target.value;
     if (!/^\d?$/.test(value)) return;
 
@@ -30,7 +33,10 @@ const page: React.FC = () => {
    * @param {number} index - The index of the OTP input field
    * @param {React.KeyboardEvent<HTMLInputElement>} event - The keyboard event
    */
-  const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.key === "Backspace" && !otp[index] && index > 0) {
       document.getElementById(`otp-${index - 1}`)?.focus();
     }
@@ -38,10 +44,12 @@ const page: React.FC = () => {
 
   return (
     <div className="h-screen w-full flex flex-col items-center py-4 px-6 bg-white gap-10">
-         <HeaderWithBackButton title="OTP Verification"/>
+      <HeaderWithBackButton title="OTP Verification" />
       <div className="flex flex-col items-center justify-center gap-4">
         <h2 className="text-xl font-semibold">Enter verification code</h2>
-        <p className="text-gray-600 text-sm">We have sent you a 6-digit verification code on</p>
+        <p className="text-gray-600 text-sm">
+          We have sent you a 6-digit verification code on
+        </p>
         <p className="text-gray-700 font-medium">+91 6267634192</p>
 
         {/* OTP Input Fields */}
@@ -65,7 +73,7 @@ const page: React.FC = () => {
 
       {/* Login Button */}
       <Link href="/user/dashboard" className="w-full">
-        <button className="bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg w-full h-10 transition-all duration-200">
+        <button className="bg-purple hover:bg-lightpurple text-white font-medium rounded-lg w-full h-10 transition-all duration-200">
           Login
         </button>
       </Link>

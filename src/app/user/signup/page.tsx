@@ -1,11 +1,34 @@
-"use client"
+"use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
-
 const page = () => {
-  const [fullname, setFullName] = React.useState("");
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
+
+  function changeHandler(event: any) {
+    const { name, value } = event.target;
+    setFormData((prevState) => {
+      return { ...prevState, [name]: value };
+    });
+  }
+
+  function submitHandler(event : any){
+    event.preventDefault();
+    console.log("Form Data :", formData);
+    setFormData({
+      fullname : "",
+      email : "",
+      password : ""
+    })
+
+    
+  }
+
   return (
     <div className="p-7">
       <div>
@@ -15,39 +38,55 @@ const page = () => {
       </div>
 
       <div className="mt-[10%]">
-        <form action="/user/verify">
-          <h3 className="text-base font-medium mb-2" >Enter your Full Name</h3>
-
-          <div className="flex gap-3 mb-5">
+        <form
+          className="flex flex-col justify-center items-center w-full h-1/2 gap-6"
+          action="/user/verify" onSubmit={submitHandler}
+        >
+          <div className="flex flex-col justify-evenly w-full">
+            <label className="text-base font-medium mb-2" htmlFor="fullname">
+              Enter your Full Name
+            </label>
             <input
               required
-              className="text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base mb-7 px-4"
+              className="text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4"
               type="text"
               placeholder="Full Name"
-              value={fullname}
-              onChange={(e) => {
-                setFullName(e.target.value);
-              }}
+              name="fullname"
+              id="fullname"
+              value={formData.fullname}
+              onChange={changeHandler}
             />
           </div>
 
-          <div className="mt-[-22px]">
-            <h3 className="text-base font-medium mb-2">Enter your Email</h3>
+          <div className="flex flex-col justify-evenly w-full">
+            <label className="text-base font-medium mb-2" htmlFor="email">
+              Enter your Email
+            </label>
             <input
               required
-              className="text-lg  w-full border-none py-2  rounded  bg-[#eeeeee] placeholder:text-base px-4 mb-10"
+              className="text-lg  w-full border-none py-2  rounded  bg-[#eeeeee] placeholder:text-base px-4"
               type="email"
-              placeholder="email"
+              placeholder="Email"
+              name="email"
+              id="email"
+              value={formData.email}
+              onChange={changeHandler}
             />
           </div>
 
-          <div className="mt-[-20px]">
-            <h3 className="text-base font-medium mb-2">Enter your Password</h3>
+          <div className="flex flex-col justify-evenly w-full">
+            <label className="text-base font-medium mb-2" htmlFor="password">
+              Enter your Password
+            </label>
             <input
               required
-              className="text-lg  w-full border-none py-2 rounded  bg-[#eeeeee] placeholder:text-base px-4 mb-7"
+              className="text-lg  w-full border-none py-2 rounded  bg-[#eeeeee] placeholder:text-base px-4"
               type="password"
-              placeholder="password"
+              placeholder="Password"
+              name="password"
+              id="password"
+              value={formData.password}
+              onChange={changeHandler}
             />
           </div>
 
