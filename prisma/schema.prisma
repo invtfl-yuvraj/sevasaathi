@@ -14,24 +14,27 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  age       Int?
-  password  String
-  phone     String?  @unique
-  imageURL  String?
-  address   String?
-  zipcode   String?
-  state     String?
-  country   String?
-  rating    Float    @default(0)
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String   @id @default(uuid())
+  username         String
+  email            String   @unique
+  age              Int?
+  password         String
+  phone            String?  @unique
+  imageURL         String?
+  address          String?
+  zipcode          String?
+  state            String?
+  country          String?
+  rating           Float    @default(0)
+  role             Role     @default(USER)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  verifyCode       String?
+  verifyCodeExpiry DateTime?
+  isVerified       Boolean  @default(false)
 
   // Relations
-  workers          Worker[]
+  captains         Captain[]
   admin            Admin?
   bookings         Booking[]
   ratings          Rating[]
@@ -40,7 +43,7 @@ model User {
   receivedMessages Message[] @relation("ReceivedMessages")
 }
 
-model Worker {
+model Captain {
   id           String   @id @default(uuid())
   userId       String   @unique
   serviceId    String?
@@ -80,14 +83,14 @@ model Service {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  workers  Worker[]
+  captains Captain[]
   bookings Booking[]
 }
 
 model Booking {
   id          String        @id @default(uuid())
   userId      String
-  workerId    String?
+  CaptainId   String?
   serviceId   String?
   status      BookingStatus @default(PENDING)
   amount      Float
@@ -98,7 +101,7 @@ model Booking {
 
   // Relations
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  worker  Worker?  @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  Captain Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
   service Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   payment Payment?
 }
@@ -120,44 +123,44 @@ model Payment {
 model Rating {
   id        String   @id @default(uuid())
   userId    String
-  workerId  String
+  CaptainId String
   rating    Float
   review    String?
   createdAt DateTime @default(now())
 
   // Relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Captain Captain @relation(fields: [CaptainId], references: [id], onDelete: Cascade)
 }
 
 model Location {
   id        String   @id @default(uuid())
-  workerId  String   @unique
+  CaptainId String   @unique
   latitude  Float
   longitude Float
   updatedAt DateTime @updatedAt
 
   // Relations
-  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  Captain Captain @relation(fields: [CaptainId], references: [id], onDelete: Cascade)
 }
 
 model Message {
   id         String   @id @default(uuid())
   senderId   String
   receiverId String
-  workerId   String?
+  CaptainId  String?
   content    String
   createdAt  DateTime @default(now())
 
   // Relations
-  sender   User    @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver User    @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
-  worker   Worker? @relation(fields: [workerId], references: [id], onDelete: SetNull)
+  sender   User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  Captain  Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
 }
 
 enum Role {
   USER
-  WORKER
+  CAPTAIN
   ADMIN
 }
 
