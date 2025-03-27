@@ -1,7 +1,21 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { useState } from "react";
+import { sendVerificationEmail } from "@/utils/sendVerificationEmail";
 
 const page = () => {
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  function changeHandler(event: any) {
+    const { name, value } = event.target;
+    setLoginData((prevState) => {
+      return { ...prevState, [name]: value };
+    });
+  }
   return (
     <div className="p-7">
       <div className="mt-[20%]">
@@ -11,22 +25,30 @@ const page = () => {
       <div className="mt-[10%]">
         <form className="flex flex-col gap-4" action="/user/verify">
           <div className="flex flex-col gap-2">
-            <h3 className="font-medium text-base">Email</h3>
+            <label className="font-medium text-base">Email</label>
             <input
               required
               className="w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg"
               type="email"
               placeholder="Email"
+              name="email"
+              id="email"
+              value={loginData.email}
+              onChange={changeHandler}
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <h3 className="font-medium text-base">Password</h3>
+            <label className="font-medium text-base">Password</label>
             <input
               required
               className="w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg"
               type="password"
               placeholder="Password"
+              name="password"
+              id="password"
+              value={loginData.password}
+              onChange={changeHandler}
             />
           </div>
 
@@ -35,7 +57,9 @@ const page = () => {
               <Link
                 href="/user-forgot-password"
                 className="text-lightpurple text-base"
-              >Forgot Password?</Link>
+              >
+                Forgot Password?
+              </Link>
             </p>
           </div>
 
@@ -83,6 +107,22 @@ const page = () => {
               Continue As Guest
             </button>
           </Link>
+
+          {/* <button
+            onClick={() => {
+              sendVerificationEmail(
+                "bhartijayprakash19@gmail.com",
+                "2345678",
+                "Bharti Jayprakash"
+              );
+
+              console.log("button clicked")
+            }}
+
+
+          >
+            Send Verification Code
+          </button> */}
           <p className="text-center">
             Create an Account{" "}
             <Link href="/user/signup" className="text-lightpurple">

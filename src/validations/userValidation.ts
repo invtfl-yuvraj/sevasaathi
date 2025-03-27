@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Role } from "@prisma/client";
+import{ Role } from "@prisma/client"
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const phoneRegex = /^(?:[A-Z]{2,3})?\s?\+?[1-9]\d{0,2}[-.\s]?\d{4,14}$/;

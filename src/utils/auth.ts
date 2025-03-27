@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const SECRECT_KEY = process.env.JWT_SECRET || "yuvraj-1234-secret-key";
+const SECRECT_KEY = process.env.JWT_SECRET || "bharti-1234-secret-key";
 
 export const hashPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10);
@@ -22,3 +22,11 @@ export const generateToken = (userId: string) => {
 export const verifyToken = (token: string) => {
   return jwt.verify(token, SECRECT_KEY);
 };
+
+export const generateVerifyCode = () => {
+  return Math.floor(100000 + (Math.random()*900000)).toString();
+}
+
+
+
+

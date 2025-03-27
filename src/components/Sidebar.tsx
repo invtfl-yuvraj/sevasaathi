@@ -9,7 +9,7 @@ import { FaPhone } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import Image from "next/image";
 
-type SidebarProps = {
+interface SidebarProps  {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
 };
