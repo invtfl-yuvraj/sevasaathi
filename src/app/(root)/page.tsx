@@ -31,6 +31,14 @@ const Home = () => (
           Continue as Professional
         </Button>
       </Link>
+      <Link href="/admin">
+        <Button
+          variant="outline"
+          className="bg-lightred"
+        >
+          Admin's Portal
+        </Button>
+      </Link>
     </div>
 
     <footer className="mt-4">
