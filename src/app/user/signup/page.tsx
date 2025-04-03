@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const page = () => {
     email: "",
     password: "",
   });
+
+  // const router = useRouter();
 
   function changeHandler(event: any) {
     const { name, value } = event.target;
@@ -26,6 +29,7 @@ const page = () => {
       password : ""
     })
 
+    // router.push(`/user/verifyemail/${formData.email}`);
     
   }
 
@@ -40,7 +44,7 @@ const page = () => {
       <div className="mt-[10%]">
         <form
           className="flex flex-col justify-center items-center w-full h-1/2 gap-6"
-          action="/user/verify" onSubmit={submitHandler}
+          action={`/user/verifyemail/${formData.email}`} onSubmit={submitHandler}
         >
           <div className="flex flex-col justify-evenly w-full">
             <label className="text-base font-medium mb-2" htmlFor="fullname">

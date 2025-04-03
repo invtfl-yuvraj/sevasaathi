@@ -3,12 +3,6 @@ import { User } from "@/types/User";
 import { generateVerifyCode, hashPassword } from "@/utils/auth";
 import { sendVerificationEmail } from "@/utils/sendVerificationEmail";
 
-const userData = {
-  username: "bharti",
-  email: "bhartijayprakash19@gmail.com",
-  password: "fnidfbifgrf",
-};
-
 export async function POST(req: Request) {
   try {
     const { username, email, password } = await req.json();
@@ -60,7 +54,7 @@ export async function POST(req: Request) {
     const emailResponse = await sendVerificationEmail(
       email,
       verifyCode,
-      username
+      username,
     );
 
     if (!emailResponse.success) {
@@ -75,6 +69,7 @@ export async function POST(req: Request) {
 
     return Response.json(
       {
+        user: createUser,
         success: true,
         message: "User Created Successfully. " + emailResponse.message,
       },

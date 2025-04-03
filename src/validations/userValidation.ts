@@ -6,7 +6,7 @@ const phoneRegex = /^(?:[A-Z]{2,3})?\s?\+?[1-9]\d{0,2}[-.\s]?\d{4,14}$/;
 const zipcodeRegex = /^[0-9]{4,10}$/;
 
 export const userValidation = z.object({
-  name: z
+  username: z
     .string()
     .min(3, { message: "Name must be at least 3 characters long." })
     .max(25, { message: "Name must be at most 25 characters long." })

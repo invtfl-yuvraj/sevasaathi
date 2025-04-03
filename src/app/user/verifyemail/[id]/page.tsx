@@ -2,9 +2,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import HeaderWithBackButton from "@/components/HeaderWithBackButton";
+import { useParams } from 'next/navigation';
 
 const page: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+
+  const params = useParams();
+  const encodedEmail = params.id;
+  const decodedEmail = typeof encodedEmail === "string" ? decodeURIComponent(encodedEmail) : "";
 
   /**
    * Handles OTP input changes
@@ -50,7 +55,7 @@ const page: React.FC = () => {
         <p className="text-gray-600 text-sm">
           We have sent you a 6-digit verification code on
         </p>
-        <p className="text-gray-700 font-medium">+91 6267634192</p>
+        <p className="text-gray-700 font-medium">{decodedEmail}</p>
 
         {/* OTP Input Fields */}
         <div className="flex gap-2 justify-center items-center py-6">
@@ -68,6 +73,7 @@ const page: React.FC = () => {
               onKeyDown={(e) => handleKeyDown(index, e)}
             />
           ))}
+          
         </div>
       </div>
 

@@ -7,16 +7,15 @@ import { resend } from "@/lib/verifyEmail";
 export async function sendVerificationEmail(
   email: string,
   verifyCode: string,
-  username: string
+  username: string,
 ): Promise<ApiResponse> {
   try {
      await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
+      from: "verify@sevasaathi.in",
       to: email,
       subject: "Sevasaathi | Verification Code",
-      react : VerificationEmailTemplate({username, otp: verifyCode}),
-      
-
+      react : VerificationEmailTemplate({username, otp: verifyCode ,email}),
+    
     });
     return {
       success: true,
