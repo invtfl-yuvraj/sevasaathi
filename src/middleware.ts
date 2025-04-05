@@ -21,3 +21,7 @@ export async function middleware(req: NextRequest) {
 
   return NextResponse.redirect(new URL("/user/login", req.url));
 }
+
+export const config = {
+  matcher: ["/user/:path*", "/user/login", "/user/signup", "/user/dashboard", "/order"],
+};

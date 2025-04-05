@@ -41,6 +41,7 @@ model User {
   payments         Payment[]
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  orders          Order[]
 }
 
 model Captain {
@@ -83,8 +84,37 @@ model Service {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  captains Captain[]
-  bookings Booking[]
+  captains    Captain[]
+  bookings    Booking[]
+  orderServices OrderService[]
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  address   String
+  date      DateTime
+  time      String
+  status    OrderStatus @default(PENDING) // NEW FIELD
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+
+  // Relations
+  orderServices OrderService[]
+  booking      Booking? @relation(fields: [id], references: [orderId], onDelete: Cascade) // Links to Booking
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OrderService {
+  id        String   @id @default(uuid())
+  serviceId String
+  orderId   String
+  units     Int
+  cost      Float
+
+  // Relations
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
@@ -92,6 +122,7 @@ model Booking {
   userId      String
   CaptainId   String?
   serviceId   String?
+  orderId     String? @unique
   status      BookingStatus @default(PENDING)
   amount      Float
   paymentId   String?
@@ -100,10 +131,26 @@ model Booking {
   createdAt   DateTime      @default(now())
 
   // Relations
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Captain Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
-  service Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
-  payment Payment?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Captain   Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  payment   Payment?
+
+  Order Order[]
+}
+
+enum OrderStatus {
+  PENDING
+  BOOKED
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
 }
 
 model Payment {
@@ -162,13 +209,6 @@ enum Role {
   USER
   CAPTAIN
   ADMIN
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  COMPLETED
-  CANCELED
 }
 
 enum PaymentStatus {
