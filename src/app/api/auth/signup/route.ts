@@ -6,7 +6,7 @@ import { sendVerificationEmail } from "@/utils/sendVerificationEmail";
 export async function POST(req: Request) {
   try {
     const { username, email, password } = await req.json();
-    console.log(username, email, password);
+    // console.log(username, email, password);
 
     if (!username || !email || !password) {
       return Response.json(

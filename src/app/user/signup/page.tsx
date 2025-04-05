@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 
 const page = () => {
   const [formData, setFormData] = useState({
-    fullname: "",
+    username: "",
     email: "",
     password: "",
   });
 
-  // const router = useRouter();
+  const router = useRouter();
 
   function changeHandler(event: any) {
     const { name, value } = event.target;
@@ -24,10 +24,29 @@ const page = () => {
     event.preventDefault();
     console.log("Form Data :", formData);
     setFormData({
-      fullname : "",
+      username : "",
       email : "",
       password : ""
+    });
+
+    //API call to register the user
+
+    fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body : JSON.stringify(formData),
     })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        // Redirect to the verification page
+        router.push(`/user/dashboard`);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     // router.push(`/user/verifyemail/${formData.email}`);
     
@@ -47,7 +66,7 @@ const page = () => {
           action={`/user/verifyemail/${formData.email}`} onSubmit={submitHandler}
         >
           <div className="flex flex-col justify-evenly w-full">
-            <label className="text-base font-medium mb-2" htmlFor="fullname">
+            <label className="text-base font-medium mb-2" htmlFor="username">
               Enter your Full Name
             </label>
             <input
@@ -55,9 +74,9 @@ const page = () => {
               className="text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4"
               type="text"
               placeholder="Full Name"
-              name="fullname"
-              id="fullname"
-              value={formData.fullname}
+              name="username"
+              id="username"
+              value={formData.username}
               onChange={changeHandler}
             />
           </div>
