@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    
+
     const hashedPassword = await hashPassword(password);
 
     const expiryDate = new Date();
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     const emailResponse = await sendVerificationEmail(
       email,
       verifyCode,
-      username,
+      username
     );
 
     if (!emailResponse.success) {
