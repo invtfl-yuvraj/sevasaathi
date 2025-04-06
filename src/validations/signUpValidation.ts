@@ -2,7 +2,7 @@ import { z } from "zod";
 import { userValidation } from "./userValidation";
 
 // Password Regex (Allows lowercase, special characters, min 6 chars)
-const passwordRegex = /^(?=.*[a-z])(?=.*[@$!%*?&]?)[A-Za-z@$!%*?&]{6,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{6,}$/;
 
 export const signUpValidation = userValidation
   .extend({

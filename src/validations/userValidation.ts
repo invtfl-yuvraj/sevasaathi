@@ -83,5 +83,5 @@ export const userValidation = z.object({
     .max(50, { message: "Country must be at most 50 characters long." })
     .optional(),
 
-  role: z.nativeEnum(Role),
+  // role: z.nativeEnum(Role),
 });

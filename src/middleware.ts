@@ -2,32 +2,32 @@ import { NextRequest, NextResponse } from "next/server";
 export { default } from "next-auth/middleware";
 import { getToken } from "next-auth/jwt";
 
-export async function middleware(req:  NextRequest) {
+export async function middleware(req: NextRequest) {
   const token = await getToken({ req });
   const url = req.nextUrl;
 
-  if (
-    token &&
-    (url.pathname.startsWith("/user/login") ||
-      url.pathname.startsWith("/user/signup"))
-  ) {
+  // Public paths that don't require authentication
+  const publicPaths = ['/user/login', '/user/signup'];
+  const isPublicPath = publicPaths.some(path => url.pathname === path);
+
+
+  // If path is public and user has token, redirect to dashboard
+  if (isPublicPath && token) {
     return NextResponse.redirect(new URL("/user/dashboard", req.url));
   }
 
-  if (!token && url.pathname.startsWith("/user")) {
+  // If path is not public and user doesn't have token, redirect to login
+  if (!isPublicPath && url.pathname.startsWith('/user') && !token) {
     return NextResponse.redirect(new URL("/user/login", req.url));
   }
-
-  return NextResponse.redirect(new URL("/user/login", req.url));
+  
+  // Allow the request to proceed
+  return NextResponse.next();
 }
-
-
 
 // Matching Paths
 export const config = {
- matcher:[
-  '/user/signup',
-  '/user/login',
-  '/user/dashboard:path*',
- ]
+  matcher: [
+    '/user/:path*',
+  ]
 }

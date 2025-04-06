@@ -2,20 +2,76 @@
 import React from "react";
 import Link from "next/link";
 import { useState } from "react";
-import { sendVerificationEmail } from "@/utils/sendVerificationEmail";
+import { useRouter } from "next/navigation";
+import { signInValidation } from "@/validations/signInValidation";
+import { ZodError } from "zod";
+import { signIn } from "next-auth/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const page = () => {
+const LoginPage = () => {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
-  function changeHandler(event: any) {
-    const { name, value } = event.target;
-    setLoginData((prevState) => {
-      return { ...prevState, [name]: value };
-    });
-  }
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name] || errors.api) {
+      setErrors((prevState) => {
+      const newState = { ...prevState };
+      delete newState[name];
+      delete newState.api;
+      return newState;
+      });
+    }
+    
+  };
+
+  const submitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const validatedData = signInValidation.parse(loginData);
+
+      const result = await signIn("credentials", {
+        email: validatedData.email,
+        password: validatedData.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setErrors({ api: "Invalid email or password. Please try again." });
+      } else {
+        setLoginData({ email: "", password: "" });
+        router.push("/user/dashboard");
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path.length) {
+            fieldErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.error("Unexpected error:", error);
+        setErrors({ form: "Something went wrong. Please try again." });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="p-7">
       <div className="mt-[20%]">
@@ -23,12 +79,17 @@ const page = () => {
       </div>
 
       <div className="mt-[10%]">
-        <form className="flex flex-col gap-4" action="/user/verify">
+        <form className="flex flex-col gap-4" onSubmit={submitHandler}>
+          {/* Email */}
           <div className="flex flex-col gap-2">
-            <label className="font-medium text-base">Email</label>
+            <label className="font-medium text-base" htmlFor="email">
+              Enter your Email
+            </label>
             <input
               required
-              className="w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg"
+              className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg ${
+                errors.email ? "border-2 border-red-500" : ""
+              }`}
               type="email"
               placeholder="Email"
               name="email"
@@ -36,21 +97,51 @@ const page = () => {
               value={loginData.email}
               onChange={changeHandler}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1"> {errors.email}</p>
+            )}
           </div>
 
+          {/* Password */}
+
           <div className="flex flex-col gap-2">
-            <label className="font-medium text-base">Password</label>
+            <label className="font-medium text-base" htmlFor="password">
+              Enter your Password
+            </label>
+            <div className="relative">
             <input
               required
-              className="w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg"
-              type="password"
+              className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg ${
+                errors.password ? "border-2 border-red-500" : ""
+              }`}
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               name="password"
               id="password"
               value={loginData.password}
               onChange={changeHandler}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+              tabIndex={-1}
+            >
+              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+            </button>
+            </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1"> {errors.password}</p>
+            )}
+            
           </div>
+          
+          {errors.form && (
+            <p className="text-red-500 text-sm mt-1 w-full">{errors.form}</p>
+          )}
+          {errors.api && (
+            <p className="text-red-500 text-sm mt-1 w-full"> {errors.api}</p>
+          )}
 
           <div className="flex justify-end ">
             <p className="">
@@ -63,8 +154,12 @@ const page = () => {
             </p>
           </div>
 
-          <button className="w-full px-4 py-2 text-base text-[#F5F5F5] bg-lightpurple rounded-lg border-none mt-2 flex flex-col justify-center items-center placeholder:text-base">
-            Sign In
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full px-4 py-2 text-base text-[#F5F5F5] bg-lightpurple rounded-lg border-none mt-2 flex flex-col justify-center items-center placeholder:text-base  disabled:bg-opacity-70 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
@@ -108,21 +203,6 @@ const page = () => {
             </button>
           </Link>
 
-          {/* <button
-            onClick={() => {
-              sendVerificationEmail(
-                "bhartijayprakash19@gmail.com",
-                "2345678",
-                "Bharti Jayprakash"
-              );
-
-              console.log("button clicked")
-            }}
-
-
-          >
-            Send Verification Code
-          </button> */}
           <p className="text-center">
             Create an Account{" "}
             <Link href="/user/signup" className="text-lightpurple">
@@ -135,4 +215,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default LoginPage;

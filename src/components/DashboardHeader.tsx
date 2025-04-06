@@ -6,6 +6,7 @@ import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 const DashboardHeader = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,8 +20,7 @@ const DashboardHeader = () => {
         />
       </button>
 
-
-      <Sidebar isVisible={isVisible} setIsVisible={setIsVisible}/>
+      <Sidebar isVisible={isVisible} setIsVisible={setIsVisible} />
 
       <div className="">
         <h4 className="uppercase text-[9px] text-locationcolor">
@@ -30,11 +30,16 @@ const DashboardHeader = () => {
       </div>
 
       <div className="w-full flex justify-end">
-        <Link href="/">
-          <button className="border-2 p-2 border-red-500 bg-red-500 text-white rounded-2xl">
+          <button
+            onClick={() =>
+              signOut({
+                callbackUrl: "/user/login",
+              })
+            }
+            className="border-2 p-2 border-red-500 bg-red-500 text-white rounded-2xl"
+          >
             Logout
           </button>
-        </Link>
       </div>
     </div>
   );

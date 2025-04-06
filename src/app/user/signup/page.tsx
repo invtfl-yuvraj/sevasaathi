@@ -3,53 +3,116 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signUpValidation } from "@/validations/signUpValidation";
+import { ZodError } from "zod";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { signIn } from "next-auth/react";
 
-const page = () => {
+const SignUpPage = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const router = useRouter();
 
-  function changeHandler(event: any) {
+  function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData((prevState) => {
       return { ...prevState, [name]: value };
     });
+
+    // crearling the error message when user starts typing
+
+    if (errors[name] || errors.api) {
+      setErrors((prevState) => {
+        const newState = { ...prevState };
+        delete newState[name];
+        return newState;
+      });
+    }
   }
 
-  function submitHandler(event : any){
+  function submitHandler(event: React.FormEvent) {
     event.preventDefault();
+
+    setIsSubmitting(true);
     console.log("Form Data :", formData);
-    setFormData({
-      username : "",
-      email : "",
-      password : ""
-    });
 
-    //API call to register the user
+    try {
+      const validatedData = signUpValidation.parse(formData);
+      console.log("Validated Signup Form Data :", validatedData);
 
-    fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body : JSON.stringify(formData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        // Redirect to the verification page
-        router.push(`/user/dashboard`);
+      fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(validatedData),
       })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to register, Try again");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Success:", data);
 
-    // router.push(`/user/verifyemail/${formData.email}`);
-    
+          setFormData({
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+
+          // Sign in the user immediately after signup
+          signIn("credentials", {
+            email: validatedData.email,
+            password: validatedData.password,
+            redirect: false,
+          }).then((signInResult) => {
+            if (signInResult?.error) {
+              console.error("Sign-in error:", signInResult.error);
+              setErrors({
+                api: "Failed to log in automatically. Please log in manually.",
+              });
+            } else {
+              // Now that the user is authenticated, redirect to verification page
+              router.push(`/user/verifyemail/${validatedData.email}`);
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          setErrors({ api: "Failed to register. Please try again." });
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path) {
+            fieldErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.error("Validation Error:", error);
+        setErrors({ form: "Invalid form data. Please check your inputs." });
+      }
+      console.log("Error:", error);
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -63,15 +126,18 @@ const page = () => {
       <div className="mt-[10%]">
         <form
           className="flex flex-col justify-center items-center w-full h-1/2 gap-6"
-          action={`/user/verifyemail/${formData.email}`} onSubmit={submitHandler}
+          onSubmit={submitHandler}
         >
+          {/* Username */}
           <div className="flex flex-col justify-evenly w-full">
             <label className="text-base font-medium mb-2" htmlFor="username">
               Enter your Full Name
             </label>
             <input
               required
-              className="text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4"
+              className={`text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4 ${
+                errors.username ? "border-2 border-red-500" : ""
+              }`}
               type="text"
               placeholder="Full Name"
               name="username"
@@ -79,15 +145,21 @@ const page = () => {
               value={formData.username}
               onChange={changeHandler}
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+            )}
           </div>
 
+          {/* Email */}
           <div className="flex flex-col justify-evenly w-full">
             <label className="text-base font-medium mb-2" htmlFor="email">
               Enter your Email
             </label>
             <input
               required
-              className="text-lg  w-full border-none py-2  rounded  bg-[#eeeeee] placeholder:text-base px-4"
+              className={`text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4 ${
+                errors.email ? "border-2 border-red-500" : ""
+              }`}
               type="email"
               placeholder="Email"
               name="email"
@@ -95,26 +167,97 @@ const page = () => {
               value={formData.email}
               onChange={changeHandler}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1"> {errors.email}</p>
+            )}
           </div>
 
+          {/* Password */}
           <div className="flex flex-col justify-evenly w-full">
             <label className="text-base font-medium mb-2" htmlFor="password">
               Enter your Password
             </label>
-            <input
-              required
-              className="text-lg  w-full border-none py-2 rounded  bg-[#eeeeee] placeholder:text-base px-4"
-              type="password"
-              placeholder="Password"
-              name="password"
-              id="password"
-              value={formData.password}
-              onChange={changeHandler}
-            />
+            <div className="relative">
+              <input
+                required
+                className={`text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4 ${
+                  errors.password ? "border-2 border-red-500" : ""
+                }`}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                name="password"
+                id="password"
+                value={formData.password}
+                onChange={changeHandler}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+                tabIndex={-1}
+              >
+                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
 
-          <button className="w-full bg-[#6759FF] text-white mt-2 border-none rounded-lg py-2 placeholder:text-base flex flex-col justify-center items-center mb-2 px-4 text-base">
-            Create Account
+          {/* Confirm Password */}
+          <div className="flex flex-col justify-evenly w-full">
+            <label
+              className="text-base font-medium mb-2"
+              htmlFor="confirmPassword"
+            >
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                required
+                className={`text-lg w-full border-none py-2 rounded bg-[#eeeeee] placeholder:text-base px-4 ${
+                  errors.confirmPassword ? "border-2 border-red-500" : ""
+                }`}
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={changeHandler}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+                tabIndex={-1}
+              >
+                {showConfirmPassword ? (
+                  <FaEyeSlash size={18} />
+                ) : (
+                  <FaEye size={18} />
+                )}
+              </button>
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
+          </div>
+
+          {errors.form && (
+            <p className="text-red-500 text-sm mt-1 w-full">{errors.form}</p>
+          )}
+          {errors.api && (
+            <p className="text-red-500 text-sm mt-1 w-full">{errors.api}</p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-[#6759FF] text-white mt-2 border-none rounded-lg py-2 placeholder:text-base flex flex-col justify-center items-center mb-2 px-4 text-base disabled:bg-opacity-70 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
@@ -129,4 +272,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignUpPage;
