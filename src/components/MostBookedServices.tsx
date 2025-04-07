@@ -1,23 +1,9 @@
 'use client'
 import { useState, useEffect } from 'react';
+import Loading from './Loading';
+import { useRandomColor } from '@/hooks/useRandomColor';
+import ItemCard from './ItemCard';
 
-// ItemCard component for service cards
-interface ItemCardProps {
-  maintitle: string;
-  subtitle: string;
-  bg?: string;
-}
-
-const ItemCard = ({ maintitle, subtitle, bg = "bg-green1" }: ItemCardProps) => {
-  return (
-    <div className={`min-w-32 h-24 ${bg} rounded-lg flex flex-col justify-center items-center p-4`}>
-      <h3 className="font-semibold text-center">{maintitle}</h3>
-      <p className="text-sm">{subtitle}</p>
-    </div>
-  );
-};
-
-// Main component for Most Booked Services
 export default function MostBookedServices() {
   interface Service {
     id: string;
@@ -25,6 +11,8 @@ export default function MostBookedServices() {
     price?: number;
   }
 
+  const { allColors } = useRandomColor();
+  
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,8 +45,13 @@ export default function MostBookedServices() {
     fetchTopServices();
   }, []);
 
+  // Function to get a color based on index
+  const getColorForIndex = (index: number) => {
+    return allColors[index % allColors.length];
+  };
+
   return (
-    <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
+    <div className="h-full w-full py-4 rounded-lg bg-white">
       <div className="h-full w-full flex items-center gap-2">
         <div className="h-8 w-1 rounded-xl bg-[#FFA3A3]"></div>
         <h2 className="text-xl font-bold">Most Booked Services</h2>
@@ -67,7 +60,7 @@ export default function MostBookedServices() {
       <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
         {loading ? (
           <div className="flex justify-center items-center w-full p-4">
-            <p>Loading services...</p>
+            <Loading message="Loading services..." />
           </div>
         ) : error ? (
           <div className="flex justify-center items-center w-full p-4 text-red-500">
@@ -78,12 +71,14 @@ export default function MostBookedServices() {
             <p>No services found</p>
           </div>
         ) : (
-          services.map((service) => (
-            <ItemCard 
+          services.map((service, index) => (
+            <ItemCard
               key={service.id}
               maintitle={service.name}
-              subtitle={`₹${service.price || '500'}`} 
-              bg="bg-green1"
+              subtitle={`₹${service.price || '500'}`}
+              bg={getColorForIndex(index)}
+              imageUrl="/Icon/ac-repair-image.png"
+              subtitlecolor={"#08952C"}
             />
           ))
         )}

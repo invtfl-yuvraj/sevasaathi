@@ -76,10 +76,26 @@ model Admin {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model ServiceCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  imageURL    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  services    Service[]
+}
+
 model Service {
   id          String   @id @default(uuid())
   name        String   @unique
   description String
+  serviceCategoryId String
+  serviceCategory ServiceCategory @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+  amount     Float @default(0)
+  imageURL    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -90,31 +106,32 @@ model Service {
 }
 
 model Order {
-  id        String   @id @default(uuid())
-  address   String
-  date      DateTime
-  time      String
-  status    OrderStatus @default(PENDING) // NEW FIELD
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
+  id            String        @id @default(uuid())
+  address       String
+  date          DateTime
+  time          String
+  status        OrderStatus   @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  userId        String
 
   // Relations
   orderServices OrderService[]
-  booking      Booking? @relation(fields: [id], references: [orderId], onDelete: Cascade) // Links to Booking
-  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking       Booking?      // optional one-to-one
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 
 model OrderService {
   id        String   @id @default(uuid())
   serviceId String
-  orderId   String
+  orderId   String? @unique
   units     Int
   cost      Float
 
   // Relations
   service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     Order?   @relation(fields: [orderId], references: [id])
 }
 
 model Booking {
@@ -122,22 +139,22 @@ model Booking {
   userId      String
   CaptainId   String?
   serviceId   String?
-  orderId     String? @unique
-  status      BookingStatus @default(PENDING)
+  orderId     String  @unique // one-to-one, must always reference an order
+  status      BookingStatus   @default(PENDING)
   amount      Float
   paymentId   String?
   scheduledAt DateTime
   completedAt DateTime?
-  createdAt   DateTime      @default(now())
+  createdAt   DateTime        @default(now())
 
   // Relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Captain   Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
   service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   payment   Payment?
-
-  Order Order[]
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
+
 
 enum OrderStatus {
   PENDING
