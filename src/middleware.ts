@@ -31,7 +31,3 @@ export const config = {
     '/user/:path*',
   ]
 }
-
-export const config = {
-  matcher: ["/user/:path*", "/user/login", "/user/signup", "/user/dashboard", "/order"],
-};
