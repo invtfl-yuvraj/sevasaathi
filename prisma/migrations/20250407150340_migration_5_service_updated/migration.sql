@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Service" ADD COLUMN     "amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "imageURL" TEXT;

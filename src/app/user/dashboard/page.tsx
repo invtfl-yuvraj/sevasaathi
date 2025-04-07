@@ -37,21 +37,8 @@ const page = () => {
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
 
-          <MostBookedServices/>
-          {/* <div className="h-full w-full flex items-center gap-2">
-            <div className="h-8 w-1 rounded-xl bg-[#FFA3A3]"></div>
-            <h2 className="text-xl font-bold">Most Booked Services</h2>
-          </div>
-
-          <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
-            <ItemCard maintitle="Plumbing" subtitle="₹500" bg="bg-green1" />
-            <ItemCard maintitle="AC repair" subtitle="₹400" bg="bg-green1" />
-            <ItemCard maintitle="Painting" subtitle="₹600" bg="bg-green1" />
-            <ItemCard maintitle="Wiring" subtitle="₹500" bg="bg-green1" />
-            <ItemCard maintitle="Electrician" subtitle="₹500" bg="bg-green1" />
-            <ItemCard maintitle="Kitchen" subtitle="₹500" bg="bg-green1" />
-
-          </div> */}
+        <MostBookedServices/>
+          
         </div>
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
@@ -61,14 +48,14 @@ const page = () => {
           </div>
 
           <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
-          <ItemCard maintitle="Yuvraj" subtitle="⭐️ 4.85" bg="bg-lightpurple" />
-          <ItemCard maintitle="Bharti" subtitle="⭐️ 4.84" bg="bg-lightpurple" />
-          <ItemCard maintitle="Harsh" subtitle="⭐️ 4.84" bg="bg-lightpurple" />
-          <ItemCard maintitle="Srijan" subtitle="⭐️ 4.83" bg="bg-lightpurple" />
-          <ItemCard maintitle="Pranay" subtitle="⭐️ 4.81" bg="bg-lightpurple" />
-          <ItemCard maintitle="Ankit" subtitle="⭐️ 4.80" bg="bg-lightpurple" />
-          <ItemCard maintitle="Anirudh" subtitle="⭐️ 4.79" bg="bg-lightpurple" />
-          <ItemCard maintitle="Himanshu" subtitle="⭐️ 4.78" bg="bg-lightpurple" />
+          <ItemCard maintitle="Yuvraj" subtitle="⭐️ 4.85" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Bharti" subtitle="⭐️ 4.84" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Harsh" subtitle="⭐️ 4.84" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Srijan" subtitle="⭐️ 4.83" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Pranay" subtitle="⭐️ 4.81" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Ankit" subtitle="⭐️ 4.80" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Anirudh" subtitle="⭐️ 4.79" bg="bg-lightpurple" subtitlecolor={""} />
+          <ItemCard maintitle="Himanshu" subtitle="⭐️ 4.78" bg="bg-lightpurple" subtitlecolor={""} />
           </div>
         </div>
 
