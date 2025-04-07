@@ -92,7 +92,7 @@ const DashboardHeader = () => {
       handleSuccess,
       handleError,
       {
-        enableHighAccuracy: true,
+        enableHighAccuracy: true, 
         timeout: 10000,
         maximumAge: 60000,
       }
