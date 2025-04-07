@@ -8,6 +8,7 @@ import ItemCard from "@/components/ItemCard";
 import ServiceCategoryList from "@/components/ServiceCategoryList";
 import ButtonNavigation from "@/components/ButtonNavigation";
 import DashboardFooter from "@/components/DashboardFooter";
+import MostBookedServices from "@/components/MostBookedServices";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,7 +36,9 @@ const page = () => {
         <ServiceCategoryList />
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
-          <div className="h-full w-full flex items-center gap-2">
+
+          <MostBookedServices/>
+          {/* <div className="h-full w-full flex items-center gap-2">
             <div className="h-8 w-1 rounded-xl bg-[#FFA3A3]"></div>
             <h2 className="text-xl font-bold">Most Booked Services</h2>
           </div>
@@ -48,7 +51,7 @@ const page = () => {
             <ItemCard maintitle="Electrician" subtitle="₹500" bg="bg-green1" />
             <ItemCard maintitle="Kitchen" subtitle="₹500" bg="bg-green1" />
 
-          </div>
+          </div> */}
         </div>
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
