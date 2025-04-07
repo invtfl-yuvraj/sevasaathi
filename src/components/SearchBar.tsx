@@ -11,7 +11,7 @@ const SearchBar: React.FC<Props> = ({ searchPlaceholder }) => {
       <input
         type="text"
         placeholder={searchPlaceholder}
-        className="h-full w-full text-[#9B9E9F] text-sm bg-transparent outline-none"
+        className="h-full w-full text-black text-sm bg-transparent outline-none"
       />
       <div className="w-1/5 h-10 bg-lightpurple rounded-lg flex justify-center items-center">
         <RiSearchLine className="text-white text-lg" />
