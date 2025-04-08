@@ -1,32 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import prisma from "@/lib/prisma";
-
-// Haversine formula to calculate distance between two points on Earth
-function calculateDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371; // Radius of the earth in km
-  const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c; // Distance in km
-  return d;
-}
-
-function deg2rad(deg: number): number {
-  return deg * (Math.PI / 180);
-}
+import { getIO } from "@/lib/socket";
+import { calculateDistance, calculateETA } from "@/lib/geolocation";
 
 // Captain updates their location while en route to user
 export async function POST(request: NextRequest) {
@@ -40,13 +17,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify this user is a captain
+    // Verify this user is a captain with optimized query
     const user = await prisma.user.findUnique({
-      where: { 
-        email: session.user.email,
-      },
-      include: {
-        captain: true
+      where: { email: session.user.email },
+      select: {
+        id: true,
+        role: true,
+        captain: {
+          select: {
+            id: true
+          }
+        }
       }
     });
 
@@ -75,7 +56,13 @@ export async function POST(request: NextRequest) {
     const trip = await prisma.trip.findFirst({
       where: { 
         id: tripId,
-        captainId: user.id // Make sure this captain is assigned to this trip
+        captainId: user.id
+      },
+      select: {
+        id: true,
+        userId: true,
+        status: true,
+        pickupAddress: true
       }
     });
 
@@ -86,21 +73,19 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Get user location (this would need to come from another source in your schema,
-    // as the User model doesn't have location fields)
-    // For this example, we'll use the pickup address coordinates or default to 0,0
-    let userLatitude = 0;
-    let userLongitude = 0;
-    
-    // If we need to get user's actual location, we would need to implement that logic
-    // based on how user locations are stored in your system
+    // Get user location (from pickup coordinates in a real app)
+    // This is simplified - you would need actual user coordinates
+    const userLocation = {
+      latitude: 34.0522, // Example coordinates
+      longitude: -118.2437
+    };
     
     // Calculate distance to user
     const distanceToUser = calculateDistance(
       latitude,
       longitude,
-      userLatitude,
-      userLongitude
+      userLocation.latitude,
+      userLocation.longitude
     );
 
     // Update captain's location in Location model
@@ -115,19 +100,22 @@ export async function POST(request: NextRequest) {
         captainId: captain.id,
         latitude,
         longitude,
+        city: "Unknown" // Default city
       },
     });
     
+    // Check if captain is very close to user (50 meters threshold)
+    const hasArrived = distanceToUser < 0.05;
+    
     // Update trip with latest tracking info
-    await prisma.trip.update({
+    const updatedTrip = await prisma.trip.update({
       where: { id: tripId },
       data: {
         captainLatitude: latitude,
         captainLongitude: longitude,
         distanceToUser: distanceToUser,
         lastLocationUpdate: new Date(),
-        // If captain is very close to user, mark as "arrived"
-        status: distanceToUser < 0.05 ? "ARRIVED" : trip.status, // 50 meters threshold
+        status: hasArrived ? "ARRIVED" : trip.status,
       },
     });
 
@@ -135,17 +123,33 @@ export async function POST(request: NextRequest) {
     await prisma.locationTracking.create({
       data: {
         tripId,
-        userId: trip.userId, // The user who booked the trip
+        userId: trip.userId,
         latitude,
         longitude,
         distanceToUser,
       },
     });
 
+    // Send real-time update via Socket.IO if available
+    const io = getIO();
+    if (io) {
+      io.to(`user_${trip.userId}`).emit('captain_location_update', {
+        tripId,
+        captainId: user.id,
+        latitude,
+        longitude,
+        distanceToUser,
+        status: updatedTrip.status,
+        timestamp: new Date(),
+        estimatedArrivalMinutes: calculateETA(distanceToUser)
+      });
+    }
+
     return NextResponse.json({
       success: true,
       distanceToUser: distanceToUser,
-      isArrived: distanceToUser < 0.05,
+      isArrived: hasArrived,
+      status: updatedTrip.status
     });
     
   } catch (error) {
@@ -180,7 +184,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user id
+    // Get user id with optimized query
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       select: { id: true }
@@ -197,7 +201,16 @@ export async function GET(request: NextRequest) {
     const trip = await prisma.trip.findUnique({
       where: { 
         id: tripId,
-        userId: user.id, // Ensure user owns this trip
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        captainId: true,
+        captainLatitude: true,
+        captainLongitude: true,
+        distanceToUser: true,
+        lastLocationUpdate: true,
+        status: true
       }
     });
 
@@ -222,10 +235,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Calculate estimated arrival time (simple calculation, can be improved)
-    // Assuming average speed of 30 km/h in city
-    const avgSpeedKmH = 30;
-    const etaMinutes = trip.distanceToUser ? (trip.distanceToUser / avgSpeedKmH) * 60 : null;
+    // Calculate ETA based on distance and average speed
+    const etaMinutes = trip.distanceToUser ? calculateETA(trip.distanceToUser) : null;
     
     return NextResponse.json({
       success: true,
@@ -235,7 +246,7 @@ export async function GET(request: NextRequest) {
         updatedAt: trip.lastLocationUpdate,
       },
       distanceInKm: trip.distanceToUser,
-      estimatedArrivalMinutes: etaMinutes ? Math.round(etaMinutes) : null,
+      estimatedArrivalMinutes: etaMinutes,
       captainName: captainName,
       status: trip.status,
     });

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import prisma from "@/lib/prisma";
+import { getIO } from "@/lib/socket";
+import { calculateDistance } from "@/lib/geolocation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,11 +17,17 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Get user
+    // Get user with optimized query - select only needed fields
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      include: {
-        captain: true,
+      select: {
+        id: true,
+        role: true,
+        captain: {
+          select: {
+            id: true
+          }
+        }
       }
     });
     
@@ -35,21 +43,22 @@ export async function POST(request: NextRequest) {
     const { latitude, longitude, city } = data;
     
     // Validate coordinates
-    if (!latitude || !longitude) {
+    if (!latitude || !longitude || typeof latitude !== 'number' || typeof longitude !== 'number') {
       return NextResponse.json(
-        { error: "Invalid location data: Coordinates are required" },
+        { error: "Invalid location data: Valid coordinates are required" },
         { status: 400 }
       );
     }
     
     // If user is a captain, update the Location model
     if (user.role === "CAPTAIN" && user.captain) {
-      await prisma.location.upsert({
+      // Update location in database
+      const updatedLocation = await prisma.location.upsert({
         where: { captainId: user.captain.id },
         update: {
           latitude,
           longitude,
-          city: city || "Unknown",
+          city: city || undefined,
           updatedAt: new Date(),
         },
         create: {
@@ -60,49 +69,74 @@ export async function POST(request: NextRequest) {
         },
       });
       
-      // Also update any active trips
-      if (user.captain) {
-        await prisma.trip.updateMany({
-          where: {
-            captainId: user.id,
-            status: {
-              in: ["ACCEPTED", "IN_PROGRESS"]
-            }
-          },
+      // Get active trips for this captain
+      const activeTrips = await prisma.trip.findMany({
+        where: {
+          captainId: user.id,
+          status: {
+            in: ["ACCEPTED", "IN_PROGRESS"]
+          }
+        },
+        select: {
+          id: true,
+          userId: true,
+          status: true
+        }
+      });
+      
+      // Update all active trips
+      for (const trip of activeTrips) {
+        // Get the user's location (simplified example)
+        // In a real app, you might get this from the trip pickup coordinates
+        const userLocation = {
+          latitude: 0, // Replace with actual user latitude
+          longitude: 0, // Replace with actual user longitude
+        };
+        
+        // Calculate distance to user
+        const distanceToUser = calculateDistance(
+          latitude,
+          longitude,
+          userLocation.latitude,
+          userLocation.longitude
+        );
+        
+        // Update trip with new location
+        await prisma.trip.update({
+          where: { id: trip.id },
           data: {
             captainLatitude: latitude,
             captainLongitude: longitude,
-            lastLocationUpdate: new Date()
+            distanceToUser,
+            lastLocationUpdate: new Date(),
+            // Auto-update status if captain is close enough
+            status: distanceToUser < 0.05 ? "ARRIVED" : trip.status,
           }
         });
         
-        // Create location tracking record for active trips
-        const activeTrips = await prisma.trip.findMany({
-          where: {
-            captainId: user.id,
-            status: {
-              in: ["ACCEPTED", "IN_PROGRESS"]
-            }
-          },
-          select: {
-            id: true,
-            userId: true
+        // Create location tracking history
+        await prisma.locationTracking.create({
+          data: {
+            tripId: trip.id,
+            userId: trip.userId,
+            latitude,
+            longitude,
+            distanceToUser,
           }
         });
         
-        for (const trip of activeTrips) {
-          // Calculate distance to user (simplified example - in a real app you'd use proper geospatial calculation)
-          // For this example, let's just use a placeholder value
-          const distanceToUser = 0; // Would calculate actual distance here
-          
-          await prisma.locationTracking.create({
-            data: {
-              tripId: trip.id,
-              userId: trip.userId,
-              latitude,
-              longitude, 
-              distanceToUser,
-            }
+        // Send real-time update via Socket.IO if available
+        const io = getIO();
+        if (io) {
+          io.to(`user_${trip.userId}`).emit('captain_location_update', {
+            tripId: trip.id,
+            captainId: user.captain.id,
+            latitude,
+            longitude,
+            distanceToUser,
+            status: distanceToUser < 0.05 ? "ARRIVED" : trip.status,
+            timestamp: new Date(),
+            estimatedArrivalMinutes: Math.round((distanceToUser / 30) * 60) // Assuming 30 km/h average speed
           });
         }
       }
@@ -128,23 +162,29 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
-  // Get authenticated user
-  const session = await getServerSession(authOptions);
-  
-  if (!session || !session.user?.email) {
-    return NextResponse.json(
-      { error: "Unauthorized: Please log in" },
-      { status: 401 }
-    );
-  }
-  
+export async function GET(request: NextRequest) {
   try {
-    // Fetch user
+    // Get authenticated user
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user?.email) {
+      return NextResponse.json(
+        { error: "Unauthorized: Please log in" },
+        { status: 401 }
+      );
+    }
+    
+    // Fetch user with optimized query
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      include: {
-        captain: true
+      select: {
+        id: true,
+        role: true,
+        captain: {
+          select: {
+            id: true
+          }
+        }
       }
     });
     
@@ -154,16 +194,17 @@ export async function GET() {
         { status: 404 }
       );
     }
-
-    // console.log("USER Role:",  user.role);
-    // console.log("USER ID:", user.id);
-    // console.log("USER Captain ID:", user.captain?.id);
-    // console.log("USER Captain:", user.captain);
     
     // If user is a captain, fetch their location
     if (user.role === "CAPTAIN" && user.captain) {
       const location = await prisma.location.findUnique({
-        where: { captainId: user.captain.id }
+        where: { captainId: user.captain.id },
+        select: {
+          latitude: true,
+          longitude: true,
+          city: true,
+          updatedAt: true
+        }
       });
       
       if (!location) {
@@ -172,9 +213,6 @@ export async function GET() {
           { status: 404 }
         );
       }
-
-      console.log("Location", location);
-      console.log("Latitude:", location.latitude, "Longitude:", location.longitude);
       
       return NextResponse.json({
         success: true,
@@ -184,23 +222,29 @@ export async function GET() {
           city: location.city,
           updatedAt: location.updatedAt
         }
-      }, { status: 200 });
+      });
     } else {
-      // For regular users, could check their active trips
+      // For regular users, check their active trips
       const activeTrip = await prisma.trip.findFirst({
         where: {
           userId: user.id,
           status: {
-            in: ["ACCEPTED", "IN_PROGRESS"]
+            in: ["ACCEPTED", "IN_PROGRESS", "ARRIVED"]
           }
         },
         orderBy: {
           createdAt: "desc"
+        },
+        select: {
+          id: true,
+          captainId: true,
+          captainLatitude: true,
+          captainLongitude: true,
+          distanceToUser: true,
+          lastLocationUpdate: true,
+          status: true
         }
       });
-
-    //   console.log("Active Trip:", activeTrip);
-
       
       if (!activeTrip || !activeTrip.captainLatitude || !activeTrip.captainLongitude) {
         return NextResponse.json(
@@ -209,12 +253,21 @@ export async function GET() {
         );
       }
       
+      // Calculate ETA
+      const etaMinutes = activeTrip.distanceToUser 
+        ? Math.round((activeTrip.distanceToUser / 30) * 60) // Assuming 30 km/h
+        : null;
+      
       return NextResponse.json({
         success: true,
         location: {
+          tripId: activeTrip.id,
           latitude: activeTrip.captainLatitude,
           longitude: activeTrip.captainLongitude,
-          updatedAt: activeTrip.lastLocationUpdate
+          distanceToUser: activeTrip.distanceToUser,
+          status: activeTrip.status,
+          updatedAt: activeTrip.lastLocationUpdate,
+          estimatedArrivalMinutes: etaMinutes
         }
       });
     }
