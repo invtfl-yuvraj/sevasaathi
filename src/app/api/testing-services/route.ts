@@ -94,7 +94,7 @@ const demoUsers = [
     zipcode: "10002",
     state: "NY",
     country: "USA",
-    isVerified: true,
+    isVerified: true
   },
   // ... (other users)
 ];
@@ -118,10 +118,10 @@ for (let i = 10; i < 60; i++) {
 
 // NEW CODE: Demo captain users
 const demoCaptainUsers = [
-  {
-    id: "user-cap-001",
+  { 
+    id: "user-cap-001", 
     username: "alexsmith",
-    email: "alex.smith@example.com",
+    email: "alex.smith@example.com", 
     password: "password123",
     phone: "+11234567899",
     age: 35,
@@ -130,12 +130,12 @@ const demoCaptainUsers = [
     state: "NY",
     country: "USA",
     isVerified: true,
-    role: Role.CAPTAIN,
+    role: Role.CAPTAIN
   },
-  {
-    id: "user-cap-002",
+  { 
+    id: "user-cap-002", 
     username: "sarahwilson",
-    email: "sarah.wilson@example.com",
+    email: "sarah.wilson@example.com", 
     password: "password123",
     phone: "+11234567898",
     age: 30,
@@ -144,12 +144,12 @@ const demoCaptainUsers = [
     state: "NY",
     country: "USA",
     isVerified: true,
-    role: Role.CAPTAIN,
+    role: Role.CAPTAIN
   },
-  {
-    id: "user-cap-003",
+  { 
+    id: "user-cap-003", 
     username: "michaelbrown",
-    email: "michael.brown@example.com",
+    email: "michael.brown@example.com", 
     password: "password123",
     phone: "+11234567897",
     age: 28,
@@ -158,34 +158,27 @@ const demoCaptainUsers = [
     state: "NY",
     country: "USA",
     isVerified: true,
-    role: Role.CAPTAIN,
+    role: Role.CAPTAIN
   },
 ];
 
 // Add more captain users for each service type
-const serviceIds = [
-  "svc-001",
-  "svc-002",
-  "svc-003",
-  "svc-004",
-  "svc-005",
-  "svc-006",
-];
+const serviceIds = ["svc-001", "svc-002", "svc-003", "svc-004", "svc-005", "svc-006"];
 for (let i = 1; i <= 12; i++) {
   const serviceIndex = (i - 1) % serviceIds.length;
   demoCaptainUsers.push({
-    id: `user-cap-${i + 3}`,
+    id: `user-cap-${i + 3}`, 
     username: `captain${i}`,
     email: `captain${i}@example.com`,
     password: "password123",
-    phone: `+19876${i.toString().padStart(5, "0")}`,
+    phone: `+19876${i.toString().padStart(5, '0')}`,
     age: 25 + (i % 15),
     address: `${i} Captain Road`,
     zipcode: `${20000 + i}`,
     state: "NY",
     country: "USA",
     isVerified: true,
-    role: Role.CAPTAIN,
+    role: Role.CAPTAIN
   });
 }
 
@@ -199,7 +192,7 @@ const demoCaptains = [
     experience: 8,
     hourlyRate: 75.0,
     location: "Manhattan, NY",
-    rating: 4.8,
+    rating: 4.8
   },
   {
     id: "captain-002",
@@ -209,10 +202,8 @@ const demoCaptains = [
     experience: 6,
     hourlyRate: 85.0,
     location: "Brooklyn, NY",
-    rating: 4.7,
+    rating: 4.7
   },
-
-  
   {
     id: "captain-003",
     userId: "user-cap-003",
@@ -221,7 +212,7 @@ const demoCaptains = [
     experience: 10,
     hourlyRate: 95.0,
     location: "Queens, NY",
-    rating: 4.9,
+    rating: 4.9
   },
 ];
 
@@ -229,9 +220,8 @@ const demoCaptains = [
 for (let i = 1; i <= 12; i++) {
   const serviceIndex = (i - 1) % serviceIds.length;
   const serviceId = serviceIds[serviceIndex];
-  const serviceName =
-    demoServices.find((s) => s.id === serviceId)?.name || "Service";
-
+  const serviceName = demoServices.find(s => s.id === serviceId)?.name || "Service";
+  
   demoCaptains.push({
     id: `captain-${i + 3}`,
     userId: `user-cap-${i + 3}`,
@@ -239,26 +229,21 @@ for (let i = 1; i <= 12; i++) {
     availability: Math.random() > 0.3, // 70% available
     experience: 2 + Math.floor(Math.random() * 10), // 2-12 years
     hourlyRate: 50 + Math.floor(Math.random() * 50), // $50-$100
-    location: [
-      "Manhattan, NY",
-      "Brooklyn, NY",
-      "Queens, NY",
-      "Bronx, NY",
-      "Staten Island, NY",
-    ][i % 5],
-    rating: +(3.5 + Math.random() * 1.5).toFixed(2)
+    location: ["Manhattan, NY", "Brooklyn, NY", "Queens, NY", "Bronx, NY", "Staten Island, NY"][i % 5],
+    rating: 3.5 + (Math.random() * 1.5) // Rating 3.5-5.0
   });
 }
 
 // NEW CODE: Captain location data
-const demoCaptainLocations = demoCaptains.map((captain) => ({
+const demoCaptainLocations = demoCaptains.map(captain => ({
   id: `location-${captain.id}`,
   captainId: captain.id,
   latitude: 40.7128 + (Math.random() * 0.1 - 0.05), // Around NYC latitude
-  longitude: -74.006 + (Math.random() * 0.1 - 0.05), // Around NYC longitude
-  city: captain.location.split(", ")[0],
+  longitude: -74.0060 + (Math.random() * 0.1 - 0.05), // Around NYC longitude
+  city: captain.location.split(', ')[0]
 }));
 
+// Base demo bookings data
 // Base demo bookings data
 const baseBookings = [
   // Electrician bookings
@@ -269,10 +254,76 @@ const baseBookings = [
     amount: 120.0,
     scheduledAt: new Date(2025, 3, 1, 10, 0), // April 1, 2025, 10:00 AM
     completedAt: new Date(2025, 3, 1, 11, 30), // April 1, 2025, 11:30 AM
-    captainId: undefined as string | undefined, // Optional captainId property
   },
-  // ... more bookings
+  // Plumber booking
+  {
+    userId: "user-002",
+    serviceId: "svc-002", // Plumber
+    status: BookingStatus.COMPLETED,
+    amount: 90.00,
+    scheduledAt: new Date(2025, 3, 2, 14, 0), // April 2, 2025, 2:00 PM
+    completedAt: new Date(2025, 3, 2, 16, 0), // April 2, 2025, 4:00 PM
+  },
+  // AC Repair booking
+  {
+    userId: "user-10",
+    serviceId: "svc-003", // AC Repair
+    status: BookingStatus.COMPLETED,
+    amount: 150.00,
+    scheduledAt: new Date(2025, 3, 3, 9, 0), // April 3, 2025, 9:00 AM
+    completedAt: new Date(2025, 3, 3, 12, 0), // April 3, 2025, 12:00 PM
+  },
+  // Cleaning booking
+  {
+    userId: "user-11",
+    serviceId: "svc-004", // Cleaning
+    status: BookingStatus.COMPLETED,
+    amount: 70.00,
+    scheduledAt: new Date(2025, 3, 4, 13, 0), // April 4, 2025, 1:00 PM
+    completedAt: new Date(2025, 3, 4, 15, 30), // April 4, 2025, 3:30 PM
+  },
+  // Gardening booking
+  {
+    userId: "user-12",
+    serviceId: "svc-005", // Gardening
+    status: BookingStatus.COMPLETED,
+    amount: 60.00,
+    scheduledAt: new Date(2025, 3, 5, 10, 0), // April 5, 2025, 10:00 AM
+    completedAt: new Date(2025, 3, 5, 13, 0), // April 5, 2025, 1:00 PM
+  },
+  // Water filter repair booking
+  {
+    userId: "user-13",
+    serviceId: "svc-006", // Water filter repair
+    status: BookingStatus.COMPLETED,
+    amount: 45.00,
+    scheduledAt: new Date(2025, 3, 6, 16, 0), // April 6, 2025, 4:00 PM
+    completedAt: new Date(2025, 3, 6, 17, 0), // April 6, 2025, 5:00 PM
+  }
 ];
+
+// Additional bookings for popular services
+for (let i = 0; i < 5; i++) {
+  baseBookings.push({
+    userId: `user-${20 + i}`,
+    serviceId: "svc-001", // Electrician - make it popular
+    status: BookingStatus.COMPLETED,
+    amount: 110.00 + (Math.random() * 20),
+    scheduledAt: new Date(2025, 3, 7 + i, 9 + i, 0), 
+    completedAt: new Date(2025, 3, 7 + i, 11 + i, 30),
+  });
+}
+
+for (let i = 0; i < 3; i++) {
+  baseBookings.push({
+    userId: `user-${25 + i}`,
+    serviceId: "svc-003", // AC Repair - second most popular
+    status: BookingStatus.COMPLETED,
+    amount: 140.00 + (Math.random() * 20),
+    scheduledAt: new Date(2025, 3, 12 + i, 10 + i, 0), 
+    completedAt: new Date(2025, 3, 12 + i, 13 + i, 0),
+  });
+}
 
 // Create order IDs for bookings
 const demoOrders = baseBookings.map((booking, index) => ({
@@ -286,25 +337,29 @@ const demoOrders = baseBookings.map((booking, index) => ({
   status: OrderStatus.COMPLETED,
 }));
 
-// Add orderIds to bookings
-const demoBookings = baseBookings.map((booking, index) => ({
-  ...booking,
-  orderId: `order-${index + 1}`,
-}));
-
-// NEW CODE: Assign captains to bookings randomly
-demoBookings.forEach((booking, index) => {
-  // Find captains with matching service
-  const matchingCaptains = demoCaptains.filter(
-    (captain) => captain.serviceId === booking.serviceId
-  );
-  if (matchingCaptains.length > 0) {
-    // Assign a random matching captain
-    const randomCaptain =
-      matchingCaptains[Math.floor(Math.random() * matchingCaptains.length)];
-    booking.captainId = randomCaptain.id;
-  }
+// Add orderIds to bookings but don't modify the objects directly
+// Instead, create a new array with orderId included
+const demoBookings = baseBookings.map((booking, index) => {
+  return {
+    ...booking,
+    orderId: `order-${index + 1}` // Match the order ID format without timestamp
+  };
 });
+
+// Create an array of captain assignments that we'll use later
+const captainAssignments = demoBookings.map(booking => {
+  // Find captains with matching service
+  const matchingCaptains = demoCaptains.filter(captain => captain.serviceId === booking.serviceId);
+  if (matchingCaptains.length > 0) {
+    // Choose a random matching captain
+    const randomCaptain = matchingCaptains[Math.floor(Math.random() * matchingCaptains.length)];
+    return {
+      bookingId: booking.orderId,
+      captainId: randomCaptain.id
+    };
+  }
+  return null;
+}).filter(Boolean); // Remove null values
 
 // Create demo order services
 const demoOrderServices = demoOrders.map((order, index) => {
@@ -359,14 +414,12 @@ export async function POST(req: NextRequest) {
       const hashedPassword = await hash(user.password, 10);
       return {
         ...user,
-        password: hashedPassword,
+        password: hashedPassword
       };
     });
-
-    const captainsWithHashedPasswords = await Promise.all(
-      hashedCaptainPasswordPromises
-    );
-
+    
+    const captainsWithHashedPasswords = await Promise.all(hashedCaptainPasswordPromises);
+    
     // Create captain users with upsert
     await prisma.$transaction(
       captainsWithHashedPasswords.map((user) =>
@@ -422,14 +475,31 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // Create bookings with order references
+    // Create bookings without captainId first
     const createdBookings = await prisma.$transaction(
       demoBookings.map((booking) =>
-        prisma.booking.create({
-          data: booking,
+        prisma.booking.upsert({
+          where: { orderId: booking.orderId },
+          update: booking,
+          create: booking,
         })
       )
     );
+
+    // FIXED CODE: Now assign captains to bookings in a separate step
+    // This avoids the TypeScript error by using Prisma's update method
+    if (captainAssignments.length > 0) {
+      await prisma.$transaction(
+        captainAssignments
+          .filter((assignment): assignment is NonNullable<typeof assignment> => assignment !== null)
+          .map(assignment => 
+            prisma.booking.update({
+              where: { orderId: assignment.bookingId },
+              data: { captainId: assignment.captainId }
+            })
+          )
+      );
+    }
 
     // Create order services
     await prisma.$transaction(
@@ -451,6 +521,7 @@ export async function POST(req: NextRequest) {
           usersCreated: demoUsers.length + demoCaptainUsers.length,
           captainsCreated: demoCaptains.length,
           locationCreated: demoCaptainLocations.length,
+          captainAssignments: captainAssignments.length,
           ordersCreated: demoOrders.length,
           orderServicesCreated: demoOrderServices.length,
         },
@@ -522,21 +593,21 @@ export async function GET(req: NextRequest) {
     const topCaptains = await prisma.captain.findMany({
       take: 5,
       orderBy: {
-        rating: "desc",
+        rating: "desc"
       },
       include: {
         user: {
           select: {
             username: true,
-            email: true,
-          },
+            email: true
+          }
         },
         service: {
           select: {
-            name: true,
-          },
-        },
-      },
+            name: true
+          }
+        }
+      }
     });
 
     return NextResponse.json(
@@ -552,14 +623,14 @@ export async function GET(req: NextRequest) {
           totalCaptains: captainsCount,
           totalLocations: locationsCount,
           topServices: serviceStats.slice(0, 6), // Limit to 6 like the top-services API
-          topCaptains: topCaptains.map((captain) => ({
+          topCaptains: topCaptains.map(captain => ({
             id: captain.id,
             name: captain.user.username,
             email: captain.user.email,
             service: captain.service?.name || "No service assigned",
             rating: captain.rating,
-            experience: captain.experience,
-          })),
+            experience: captain.experience
+          }))
         },
       },
       { status: 200 }
@@ -585,21 +656,21 @@ export async function DELETE(req: NextRequest) {
     await prisma.orderService.deleteMany({});
     await prisma.booking.deleteMany({});
     await prisma.order.deleteMany({});
-
+    
     // NEW CODE: Delete captain locations
     await prisma.location.deleteMany({
       where: {
-        captainId: { in: demoCaptains.map((c) => c.id) },
+        captainId: { in: demoCaptains.map(c => c.id) },
       },
     });
-
+    
     // NEW CODE: Delete captains
     await prisma.captain.deleteMany({
       where: {
-        id: { in: demoCaptains.map((c) => c.id) },
+        id: { in: demoCaptains.map(c => c.id) },
       },
     });
-
+    
     await prisma.service.deleteMany({
       where: {
         id: { in: demoServices.map((s) => s.id) },
@@ -611,13 +682,13 @@ export async function DELETE(req: NextRequest) {
         id: { in: demoCategories.map((c) => c.id) },
       },
     });
-
+    
     // Delete all demo users including captain users
     const allUserIds = [
-      ...demoUsers.map((u) => u.id),
-      ...demoCaptainUsers.map((u) => u.id),
+      ...demoUsers.map(u => u.id),
+      ...demoCaptainUsers.map(u => u.id)
     ];
-
+    
     await prisma.user.deleteMany({
       where: {
         id: { in: allUserIds },
