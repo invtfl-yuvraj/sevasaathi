@@ -105,7 +105,6 @@ model Service {
   // Relations
   serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
   captains          Captain[]
-  bookings          Booking[]
   orderServices     OrderService[]
 }
 
@@ -143,7 +142,6 @@ model Booking {
   id          String        @id @default(uuid())
   userId      String
   captainId   String?
-  serviceId   String?
   orderId     String        @unique
   status      BookingStatus @default(PENDING)
   amount      Float
@@ -155,7 +153,6 @@ model Booking {
   // Relations
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   captain     Captain?      @relation(fields: [captainId], references: [id], onDelete: SetNull)
-  service     Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   payment     Payment?
   order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   trip        Trip?

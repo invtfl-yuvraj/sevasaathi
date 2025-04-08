@@ -4,7 +4,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 
 export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   try {
-    const { userId, orderId, serviceId, amount, scheduledAt } = await req.json();
+    const { userId, orderId, amount, scheduledAt} = await req.json();
 
     if (!userId || !amount || !scheduledAt || !orderId) {
       return NextResponse.json(
@@ -14,7 +14,6 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
     }
 
     // a payment is created when a booking is made
-    const paymentStatus = "COMPLETED"; // Assuming payment is completed for the booking
 
     // once the payment is integerated the booking will be updated with the "paymentId" also
     // now update the booking model with the all the data
@@ -23,8 +22,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
         userId,
         orderId,
         amount,
-        scheduledAt: new Date(scheduledAt),
-        status: paymentStatus,
+        scheduledAt: new Date(scheduledAt)
       },
     });
 
