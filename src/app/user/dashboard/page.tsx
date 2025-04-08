@@ -9,6 +9,8 @@ import ServiceCategoryList from "@/components/ServiceCategoryList";
 import ButtonNavigation from "@/components/ButtonNavigation";
 import DashboardFooter from "@/components/DashboardFooter";
 import MostBookedServices from "@/components/MostBookedServices";
+import CaptainTrackingClient from "@/components/CaptainTrackingClient";
+import CaptainLocationTracker from "@/components/CaptainLocationTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,7 +21,7 @@ const page = () => {
   const searchPlaceholder = "Search what you need...";
 
   return (
-    <>
+    <div className={`${inter.variable} font-sans bg-[#F5F5F5] h-screen`}>
 
       <div className="bg-gray-100 w-full flex flex-col justify-between gap-2">
         <div className="bg-white px-6 flex flex-col justify-between py-4 gap-2 h-full w-full rounded-b-lg">
@@ -59,6 +61,9 @@ const page = () => {
           </div>
         </div>
 
+        <CaptainTrackingClient tripId="trip1" userId="2ef8d520-6275-4459-9447-325d154b3ba4"></CaptainTrackingClient>
+        <CaptainLocationTracker tripId="trip1"></CaptainLocationTracker>
+
         <div className="bg-[#B6B6D6]">
           {/* logo */}
           <div>
@@ -88,7 +93,7 @@ const page = () => {
           <DashboardFooter />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
