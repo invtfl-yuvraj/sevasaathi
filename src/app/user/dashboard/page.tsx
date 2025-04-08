@@ -13,6 +13,7 @@ import CaptainTrackingClient from "@/components/CaptainTrackingClient";
 import CaptainLocationTracker from "@/components/CaptainLocationTracker";
 import TripDetailsPage from "@/components/TripDetailsPage";
 import TripLocationMap from "@/components/TripLocationMap";
+import TopRatedPartners from "@/components/TopPartners";
 
 const inter = Inter({
   subsets: ["latin"],

@@ -32,6 +32,7 @@ export async function GET(req: NextRequest) {
       service: captain.service?.name || "No service assigned",
       rating: captain.rating,
       experience: captain.experience,
+      
     }));
 
     return NextResponse.json(

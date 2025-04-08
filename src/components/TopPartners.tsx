@@ -5,17 +5,12 @@ import { useRandomColor } from '@/hooks/useRandomColor';
 import ItemCard from './ItemCard';
 
 interface Captain {
-  id: string;
-  userId: string;
-  serviceId: string | null;
-  availability: boolean;
-  experience: number;
-  hourlyRate: number;
-  location: string;
-  rating: number;
-  createdAt: Date;
-  updatedAt: Date;
-
+    id: string,
+    name: string,
+    email: string,
+    service: string,
+    rating: number,
+    experience: string,
 }
 
 export default function TopRatedPartners() {
@@ -29,7 +24,6 @@ export default function TopRatedPartners() {
     const fetchTopCaptains = async () => {
       try {
         setLoading(true);
-        // Changed the endpoint to match your API route
         const response = await fetch('/api/top-partners');
         
         if (!response.ok) {
@@ -39,7 +33,6 @@ export default function TopRatedPartners() {
         const result = await response.json();
         
         if (result.success) {
-          // Updated to match the actual API response structure
           setCaptains(result.data);
         } else {
           setError(result.message || 'Failed to load partners');
@@ -61,35 +54,35 @@ export default function TopRatedPartners() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="h-full w-full py-4 rounded-lg bg-white">
       <div className="h-full w-full flex items-center gap-2">
         <div className="h-8 w-1 rounded-xl bg-lightpurple"></div>
         <h2 className="text-xl font-bold">Top Partners</h2>
       </div>
       
-      <div className="flex justify-center items-center w-full p-4">
+      <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
         {loading ? (
-          <div className="col-span-full flex justify-center">
-            <Loading />
+          <div className="flex justify-center items-center w-full p-4">
+            <Loading message="Loading partners..." />
           </div>
         ) : error ? (
-          <div className="col-span-full text-center text-red-500">
-            {error}
+          <div className="flex justify-center items-center w-full p-4 text-red-500">
+            <p>{error}</p>
           </div>
         ) : captains.length === 0 ? (
-          <div className="col-span-full text-center">
-            No partners found
+          <div className="flex justify-center items-center w-full p-4">
+            <p>No partners found</p>
           </div>
         ) : (
           captains.map((captain, index) => (
             <ItemCard
               key={captain.id}
-              captain={captain}
               color={getColorForIndex(index)}
-              maintitle={`${captain.userId}`}
-              subtitle={`Rating: ${captain.rating}`}
+              maintitle={`${captain.name}`}
+              subtitle={`⭐️ ${captain.rating.toFixed(2)}`}
               bg={getColorForIndex(index)}
               subtitlecolor="text-gray-500"
+              imageUrl="https://static.vecteezy.com/system/resources/previews/000/252/627/non_2x/vector-factory-worker-illustration.jpg"
             />
           ))
         )}

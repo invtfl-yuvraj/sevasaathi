@@ -6,7 +6,7 @@ interface ItemCardProps {
   bg: string;
   imageUrl?: string; 
   subtitlecolor: string;
-  captain:Captain;
+  // captain:Captain;
   color:string;
 }
 
