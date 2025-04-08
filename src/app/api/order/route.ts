@@ -5,10 +5,10 @@ import { ApiResponse } from "@/types/ApiResponse";
 export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   try {
     const body = await req.json();
-    const { address, date, time, services, userId } = body;
+    const { address, date, time, services, userId, status } = body;
     console.log("Received data:", body);
 
-    if (!address || !date || !time || !Array.isArray(services) || !userId) {
+    if (!address || !date || !time || !Array.isArray(services) || !userId || status) {
       return NextResponse.json(
         { success: false, message: "Invalid input data" },
         { status: 400 }
@@ -23,7 +23,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
         address: address || "",
         date: new Date(date),
         time: time || "",
-        status: "PENDING",
+        status: status || "pending",
         userId: userId,
       },
     });
