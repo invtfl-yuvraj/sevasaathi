@@ -227,6 +227,8 @@ model Trip {
   lastLocationUpdate DateTime?
   pickupAddress      String?
   dropoffAddress     String?
+  pickupLatitude     Float?    
+  pickupLongitude    Float?    
   startedAt          DateTime?
   completedAt        DateTime?
   orderId            String?    @unique
