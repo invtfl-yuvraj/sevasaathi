@@ -1,38 +1,14 @@
+// app/api/match/captain/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options"; 
-import prisma from "@/lib/prisma"; 
-
-// Helper function to calculate distance between two coordinates in kilometers
-function calculateDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371; // Radius of the earth in km
-  const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c; // Distance in km
-  return d;
-}
-
-function deg2rad(deg: number): number {
-  return deg * (Math.PI / 180);
-}
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import prisma from "@/lib/prisma";
+import { calculateDistance, calculateETA } from "@/lib/geolocation";
 
 export async function GET(request: NextRequest) {
   try {
     // Get authenticated user
     const session = await getServerSession(authOptions);
-    
     if (!session || !session.user?.email) {
       return NextResponse.json(
         { error: "Unauthorized: Please log in" },
@@ -40,12 +16,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user
+    // Get user with optimized query
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: {
-        id: true,
-      },
+      select: { id: true },
     });
 
     if (!user) {
@@ -55,12 +29,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Parse query parameters (optional)
+    // Parse query parameters
     const url = new URL(request.url);
-    const maxDistance = parseFloat(url.searchParams.get("distance") || "10"); // Default 10km
-    const limit = parseInt(url.searchParams.get("limit") || "5"); // Default 5 results
-
-    // Get coordinates from query parameters (since User model doesn't have location fields)
+    const maxDistance = parseFloat(url.searchParams.get("distance") || "10");
+    const limit = parseInt(url.searchParams.get("limit") || "5");
     const userLatitude = parseFloat(url.searchParams.get("lat") || "0");
     const userLongitude = parseFloat(url.searchParams.get("lng") || "0");
 
@@ -71,12 +43,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Find available captains
+    // Find available captains with optimized query
     const captainsWithLocations = await prisma.captain.findMany({
       where: {
         availability: true,
       },
-      include: {
+      select: {
+        id: true,
+        userId: true,
+        rating: true,
+        hourlyRate: true,
+        location: true,
+        experience: true,
         user: {
           select: {
             id: true,
@@ -84,7 +62,13 @@ export async function GET(request: NextRequest) {
             imageURL: true,
           }
         },
-        locationData: true,
+        locationData: {
+          select: {
+            latitude: true,
+            longitude: true,
+            city: true
+          }
+        },
       }
     });
 
@@ -103,7 +87,7 @@ export async function GET(request: NextRequest) {
           captain.locationData!.longitude
         );
         
-        return { 
+        return {
           id: captain.id,
           userId: captain.userId,
           username: captain.user.username,
@@ -116,6 +100,7 @@ export async function GET(request: NextRequest) {
           latitude: captain.locationData!.latitude,
           longitude: captain.locationData!.longitude,
           city: captain.locationData!.city || "Unknown",
+          estimatedArrivalMinutes: calculateETA(distance)
         };
       })
       .filter(captain => captain.distance <= maxDistance)
@@ -124,8 +109,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      results: nearbyResults,
-      total: nearbyResults.length,
+      captains: nearbyResults,
+      count: nearbyResults.length,
     });
     
   } catch (error) {

@@ -8,19 +8,24 @@ declare module "next-auth" {
     email?: string;
     username?: string;
     isVerified?: boolean;
+    accessToken?: string;
   }
+  
   interface Session {
     user: {
       id?: string;
       email?: string;
       username?: string;
       isVerified?: boolean;
+      accessToken?: string;
     } & DefaultSession["user"];
   }
+  
   interface JWT {
     id?: string;
     email?: string;
     username?: string;
     isVerified?: boolean;
+    accessToken?: string;
   }
 }

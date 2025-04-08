@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { hash } from "bcrypt"; // Import bcrypt for password hashing
-import { BookingStatus, OrderStatus } from "@prisma/client"; // Import enums from Prisma client
+import { BookingStatus, OrderStatus, Role } from "@prisma/client"; // Import enums from Prisma client
 
 // Demo categories to create first
 const demoCategories = [
@@ -96,84 +96,7 @@ const demoUsers = [
     country: "USA",
     isVerified: true
   },
-  { 
-    id: "user-003", 
-    username: "robertjohnson",
-    email: "robert@example.com", 
-    password: "password123",
-    phone: "+11234567892",
-    age: 35,
-    address: "789 Oak St",
-    zipcode: "10003",
-    state: "NY",
-    country: "USA",
-    isVerified: true
-  },
-  { 
-    id: "user-004", 
-    username: "emilydavis",
-    email: "emily@example.com", 
-    password: "password123",
-    phone: "+11234567893",
-    age: 30,
-    address: "101 Pine St",
-    zipcode: "10004",
-    state: "NY",
-    country: "USA",
-    isVerified: true
-  },
-  { 
-    id: "user-005", 
-    username: "michaelwilson",
-    email: "michael@example.com", 
-    password: "password123",
-    phone: "+11234567894",
-    age: 40,
-    address: "202 Maple St",
-    zipcode: "10005",
-    state: "NY",
-    country: "USA",
-    isVerified: true
-  },
-  { 
-    id: "user-006", 
-    username: "sarahbrown",
-    email: "sarah@example.com", 
-    password: "password123",
-    phone: "+11234567895",
-    age: 27,
-    address: "303 Cedar St",
-    zipcode: "10006",
-    state: "NY",
-    country: "USA",
-    isVerified: true
-  },
-  { 
-    id: "user-007", 
-    username: "davidmiller",
-    email: "david@example.com", 
-    password: "password123",
-    phone: "+11234567896",
-    age: 33,
-    address: "404 Birch St",
-    zipcode: "10007",
-    state: "NY",
-    country: "USA",
-    isVerified: true
-  },
-  { 
-    id: "user-008", 
-    username: "jennifertaylor",
-    email: "jennifer@example.com", 
-    password: "password123",
-    phone: "+11234567897",
-    age: 29,
-    address: "505 Walnut St",
-    zipcode: "10008",
-    state: "NY",
-    country: "USA",
-    isVerified: true
-  },
+  // ... (other users)
 ];
 
 // Add more users for the generated bookings
@@ -193,6 +116,134 @@ for (let i = 10; i < 60; i++) {
   });
 }
 
+// NEW CODE: Demo captain users
+const demoCaptainUsers = [
+  { 
+    id: "user-cap-001", 
+    username: "alexsmith",
+    email: "alex.smith@example.com", 
+    password: "password123",
+    phone: "+11234567899",
+    age: 35,
+    address: "123 Captain St",
+    zipcode: "10010",
+    state: "NY",
+    country: "USA",
+    isVerified: true,
+    role: Role.CAPTAIN
+  },
+  { 
+    id: "user-cap-002", 
+    username: "sarahwilson",
+    email: "sarah.wilson@example.com", 
+    password: "password123",
+    phone: "+11234567898",
+    age: 30,
+    address: "456 Captain Ave",
+    zipcode: "10011",
+    state: "NY",
+    country: "USA",
+    isVerified: true,
+    role: Role.CAPTAIN
+  },
+  { 
+    id: "user-cap-003", 
+    username: "michaelbrown",
+    email: "michael.brown@example.com", 
+    password: "password123",
+    phone: "+11234567897",
+    age: 28,
+    address: "789 Captain Blvd",
+    zipcode: "10012",
+    state: "NY",
+    country: "USA",
+    isVerified: true,
+    role: Role.CAPTAIN
+  },
+];
+
+// Add more captain users for each service type
+const serviceIds = ["svc-001", "svc-002", "svc-003", "svc-004", "svc-005", "svc-006"];
+for (let i = 1; i <= 12; i++) {
+  const serviceIndex = (i - 1) % serviceIds.length;
+  demoCaptainUsers.push({
+    id: `user-cap-${i + 3}`, 
+    username: `captain${i}`,
+    email: `captain${i}@example.com`,
+    password: "password123",
+    phone: `+19876${i.toString().padStart(5, '0')}`,
+    age: 25 + (i % 15),
+    address: `${i} Captain Road`,
+    zipcode: `${20000 + i}`,
+    state: "NY",
+    country: "USA",
+    isVerified: true,
+    role: Role.CAPTAIN
+  });
+}
+
+// NEW CODE: Captain profile data
+const demoCaptains = [
+  {
+    id: "captain-001",
+    userId: "user-cap-001",
+    serviceId: "svc-001", // Electrician
+    availability: true,
+    experience: 8,
+    hourlyRate: 75.0,
+    location: "Manhattan, NY",
+    rating: 4.8
+  },
+  {
+    id: "captain-002",
+    userId: "user-cap-002",
+    serviceId: "svc-002", // Plumber
+    availability: true,
+    experience: 6,
+    hourlyRate: 85.0,
+    location: "Brooklyn, NY",
+    rating: 4.7
+  },
+  {
+    id: "captain-003",
+    userId: "user-cap-003",
+    serviceId: "svc-003", // AC Repair
+    availability: true,
+    experience: 10,
+    hourlyRate: 95.0,
+    location: "Queens, NY",
+    rating: 4.9
+  },
+];
+
+// Generate captain profiles for each captain user
+for (let i = 1; i <= 12; i++) {
+  const serviceIndex = (i - 1) % serviceIds.length;
+  const serviceId = serviceIds[serviceIndex];
+  const serviceName = demoServices.find(s => s.id === serviceId)?.name || "Service";
+  
+  demoCaptains.push({
+    id: `captain-${i + 3}`,
+    userId: `user-cap-${i + 3}`,
+    serviceId: serviceId,
+    availability: Math.random() > 0.3, // 70% available
+    experience: 2 + Math.floor(Math.random() * 10), // 2-12 years
+    hourlyRate: 50 + Math.floor(Math.random() * 50), // $50-$100
+    location: ["Manhattan, NY", "Brooklyn, NY", "Queens, NY", "Bronx, NY", "Staten Island, NY"][i % 5],
+    rating: 3.5 + (Math.random() * 1.5) // Rating 3.5-5.0
+  });
+}
+
+// NEW CODE: Captain location data
+const demoCaptainLocations = demoCaptains.map(captain => ({
+  id: `location-${captain.id}`,
+  captainId: captain.id,
+  latitude: 40.7128 + (Math.random() * 0.1 - 0.05), // Around NYC latitude
+  longitude: -74.0060 + (Math.random() * 0.1 - 0.05), // Around NYC longitude
+  city: captain.location.split(', ')[0]
+}));
+
+// Base demo bookings data
 // Base demo bookings data
 const baseBookings = [
   // Electrician bookings
@@ -204,118 +255,75 @@ const baseBookings = [
     scheduledAt: new Date(2025, 3, 1, 10, 0), // April 1, 2025, 10:00 AM
     completedAt: new Date(2025, 3, 1, 11, 30), // April 1, 2025, 11:30 AM
   },
+  // Plumber booking
   {
     userId: "user-002",
-    serviceId: "svc-001", // Electrician
-    status: BookingStatus.COMPLETED,
-    amount: 95.50,
-    scheduledAt: new Date(2025, 3, 2, 14, 0), // April 2, 2025, 2:00 PM
-    completedAt: new Date(2025, 3, 2, 15, 15), // April 2, 2025, 3:15 PM
-  },
-  // Add 10 more electrician bookings with different users and dates
-  ...Array(10).fill(null).map((_, i) => ({
-    userId: `user-${i + 10}`,
-    serviceId: "svc-001", // Electrician
-    status: BookingStatus.COMPLETED,
-    amount: 100 + Math.random() * 50,
-    scheduledAt: new Date(2025, 3, i + 3, 9 + i % 8, 0),
-    completedAt: new Date(2025, 3, i + 3, 10 + i % 8, 30),
-  })),
-
-  // Plumber bookings
-  {
-    userId: "user-003",
     serviceId: "svc-002", // Plumber
+    status: BookingStatus.COMPLETED,
+    amount: 90.00,
+    scheduledAt: new Date(2025, 3, 2, 14, 0), // April 2, 2025, 2:00 PM
+    completedAt: new Date(2025, 3, 2, 16, 0), // April 2, 2025, 4:00 PM
+  },
+  // AC Repair booking
+  {
+    userId: "user-10",
+    serviceId: "svc-003", // AC Repair
     status: BookingStatus.COMPLETED,
     amount: 150.00,
     scheduledAt: new Date(2025, 3, 3, 9, 0), // April 3, 2025, 9:00 AM
-    completedAt: new Date(2025, 3, 3, 10, 45), // April 3, 2025, 10:45 AM
+    completedAt: new Date(2025, 3, 3, 12, 0), // April 3, 2025, 12:00 PM
   },
-  // Add 8 more plumber bookings
-  ...Array(8).fill(null).map((_, i) => ({
-    userId: `user-${i + 20}`,
-    serviceId: "svc-002", // Plumber
-    status: BookingStatus.COMPLETED,
-    amount: 130 + Math.random() * 60,
-    scheduledAt: new Date(2025, 3, i + 4, 10 + i % 7, 0),
-    completedAt: new Date(2025, 3, i + 4, 11 + i % 7, 45),
-  })),
-
-  // AC Repair bookings
+  // Cleaning booking
   {
-    userId: "user-004",
-    serviceId: "svc-003", // AC Repair
-    status: BookingStatus.COMPLETED,
-    amount: 200.00,
-    scheduledAt: new Date(2025, 3, 4, 13, 0), // April 4, 2025, 1:00 PM
-    completedAt: new Date(2025, 3, 4, 14, 30), // April 4, 2025, 2:30 PM
-  },
-  // Add 6 more AC Repair bookings
-  ...Array(6).fill(null).map((_, i) => ({
-    userId: `user-${i + 30}`,
-    serviceId: "svc-003", // AC Repair
-    status: BookingStatus.COMPLETED,
-    amount: 180 + Math.random() * 70,
-    scheduledAt: new Date(2025, 3, i + 5, 11 + i % 6, 0),
-    completedAt: new Date(2025, 3, i + 5, 13 + i % 6, 0),
-  })),
-
-  // Cleaning bookings
-  {
-    userId: "user-005",
+    userId: "user-11",
     serviceId: "svc-004", // Cleaning
     status: BookingStatus.COMPLETED,
-    amount: 80.00,
+    amount: 70.00,
+    scheduledAt: new Date(2025, 3, 4, 13, 0), // April 4, 2025, 1:00 PM
+    completedAt: new Date(2025, 3, 4, 15, 30), // April 4, 2025, 3:30 PM
+  },
+  // Gardening booking
+  {
+    userId: "user-12",
+    serviceId: "svc-005", // Gardening
+    status: BookingStatus.COMPLETED,
+    amount: 60.00,
     scheduledAt: new Date(2025, 3, 5, 10, 0), // April 5, 2025, 10:00 AM
     completedAt: new Date(2025, 3, 5, 13, 0), // April 5, 2025, 1:00 PM
   },
-  // Add 5 more Cleaning bookings
-  ...Array(5).fill(null).map((_, i) => ({
-    userId: `user-${i + 40}`,
-    serviceId: "svc-004", // Cleaning
-    status: BookingStatus.COMPLETED,
-    amount: 75 + Math.random() * 30,
-    scheduledAt: new Date(2025, 3, i + 6, 9 + i % 5, 0),
-    completedAt: new Date(2025, 3, i + 6, 12 + i % 5, 0),
-  })),
-
-  // Gardening bookings
+  // Water filter repair booking
   {
-    userId: "user-006",
-    serviceId: "svc-005", // Gardening
+    userId: "user-13",
+    serviceId: "svc-006", // Water filter repair
     status: BookingStatus.COMPLETED,
-    amount: 110.00,
-    scheduledAt: new Date(2025, 3, 6, 15, 0), // April 6, 2025, 3:00 PM
+    amount: 45.00,
+    scheduledAt: new Date(2025, 3, 6, 16, 0), // April 6, 2025, 4:00 PM
     completedAt: new Date(2025, 3, 6, 17, 0), // April 6, 2025, 5:00 PM
-  },
-  // Add 4 more Gardening bookings
-  ...Array(4).fill(null).map((_, i) => ({
-    userId: `user-${i + 50}`,
-    serviceId: "svc-005", // Gardening
-    status: BookingStatus.COMPLETED,
-    amount: 100 + Math.random() * 40,
-    scheduledAt: new Date(2025, 3, i + 7, 14 + i % 4, 0),
-    completedAt: new Date(2025, 3, i + 7, 16 + i % 4, 0),
-  })),
-
-  // Water filter repair bookings
-  {
-    userId: "user-007",
-    serviceId: "svc-006", // Water filter repair
-    status: BookingStatus.COMPLETED,
-    amount: 90.00,
-    scheduledAt: new Date(2025, 3, 7, 11, 0), // April 7, 2025, 11:00 AM
-    completedAt: new Date(2025, 3, 7, 12, 30), // April 7, 2025, 12:30 PM
-  },
-  {
-    userId: "user-008",
-    serviceId: "svc-006", // Water filter repair
-    status: BookingStatus.COMPLETED,
-    amount: 85.00,
-    scheduledAt: new Date(2025, 3, 8, 16, 0), // April 8, 2025, 4:00 PM
-    completedAt: new Date(2025, 3, 8, 17, 15), // April 8, 2025, 5:15 PM
-  },
+  }
 ];
+
+// Additional bookings for popular services
+for (let i = 0; i < 5; i++) {
+  baseBookings.push({
+    userId: `user-${20 + i}`,
+    serviceId: "svc-001", // Electrician - make it popular
+    status: BookingStatus.COMPLETED,
+    amount: 110.00 + (Math.random() * 20),
+    scheduledAt: new Date(2025, 3, 7 + i, 9 + i, 0), 
+    completedAt: new Date(2025, 3, 7 + i, 11 + i, 30),
+  });
+}
+
+for (let i = 0; i < 3; i++) {
+  baseBookings.push({
+    userId: `user-${25 + i}`,
+    serviceId: "svc-003", // AC Repair - second most popular
+    status: BookingStatus.COMPLETED,
+    amount: 140.00 + (Math.random() * 20),
+    scheduledAt: new Date(2025, 3, 12 + i, 10 + i, 0), 
+    completedAt: new Date(2025, 3, 12 + i, 13 + i, 0),
+  });
+}
 
 // Create order IDs for bookings
 const demoOrders = baseBookings.map((booking, index) => ({
@@ -327,11 +335,29 @@ const demoOrders = baseBookings.map((booking, index) => ({
   status: OrderStatus.COMPLETED
 }));
 
-// Add orderIds to bookings
-const demoBookings = baseBookings.map((booking, index) => ({
-  ...booking,
-  orderId: `order-${index + 1}`
-}));
+// Add orderIds to bookings but don't modify the objects directly
+// Instead, create a new array with orderId included
+const demoBookings = baseBookings.map((booking, index) => {
+  return {
+    ...booking,
+    orderId: `order-${index + 1}` // Match the order ID format without timestamp
+  };
+});
+
+// Create an array of captain assignments that we'll use later
+const captainAssignments = demoBookings.map(booking => {
+  // Find captains with matching service
+  const matchingCaptains = demoCaptains.filter(captain => captain.serviceId === booking.serviceId);
+  if (matchingCaptains.length > 0) {
+    // Choose a random matching captain
+    const randomCaptain = matchingCaptains[Math.floor(Math.random() * matchingCaptains.length)];
+    return {
+      bookingId: booking.orderId,
+      captainId: randomCaptain.id
+    };
+  }
+  return null;
+}).filter(Boolean); // Remove null values
 
 // Create demo order services
 const demoOrderServices = demoOrders.map((order, index) => {
@@ -381,6 +407,28 @@ export async function POST(req: NextRequest) {
       )
     );
 
+    // NEW CODE: Create captain users
+    const hashedCaptainPasswordPromises = demoCaptainUsers.map(async (user) => {
+      const hashedPassword = await hash(user.password, 10);
+      return {
+        ...user,
+        password: hashedPassword
+      };
+    });
+    
+    const captainsWithHashedPasswords = await Promise.all(hashedCaptainPasswordPromises);
+    
+    // Create captain users with upsert
+    await prisma.$transaction(
+      captainsWithHashedPasswords.map((user) =>
+        prisma.user.upsert({
+          where: { id: user.id },
+          update: user,
+          create: user,
+        })
+      )
+    );
+
     // Create services
     await prisma.$transaction(
       demoServices.map((service) =>
@@ -388,6 +436,28 @@ export async function POST(req: NextRequest) {
           where: { id: service.id },
           update: service,
           create: service,
+        })
+      )
+    );
+
+    // NEW CODE: Create captain profiles
+    await prisma.$transaction(
+      demoCaptains.map((captain) =>
+        prisma.captain.upsert({
+          where: { id: captain.id },
+          update: captain,
+          create: captain,
+        })
+      )
+    );
+
+    // NEW CODE: Create captain locations
+    await prisma.$transaction(
+      demoCaptainLocations.map((location) =>
+        prisma.location.upsert({
+          where: { captainId: location.captainId },
+          update: location,
+          create: location,
         })
       )
     );
@@ -403,14 +473,31 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // Create bookings with order references
+    // Create bookings without captainId first
     const createdBookings = await prisma.$transaction(
       demoBookings.map((booking) =>
-        prisma.booking.create({
-          data: booking,
+        prisma.booking.upsert({
+          where: { orderId: booking.orderId },
+          update: booking,
+          create: booking,
         })
       )
     );
+
+    // FIXED CODE: Now assign captains to bookings in a separate step
+    // This avoids the TypeScript error by using Prisma's update method
+    if (captainAssignments.length > 0) {
+      await prisma.$transaction(
+        captainAssignments
+          .filter((assignment): assignment is NonNullable<typeof assignment> => assignment !== null)
+          .map(assignment => 
+            prisma.booking.update({
+              where: { orderId: assignment.bookingId },
+              data: { captainId: assignment.captainId }
+            })
+          )
+      );
+    }
 
     // Create order services
     await prisma.$transaction(
@@ -429,7 +516,10 @@ export async function POST(req: NextRequest) {
           categoriesCreated: demoCategories.length,
           bookingsCreated: createdBookings.length,
           servicesCreated: demoServices.length,
-          usersCreated: demoUsers.length,
+          usersCreated: demoUsers.length + demoCaptainUsers.length,
+          captainsCreated: demoCaptains.length,
+          locationCreated: demoCaptainLocations.length,
+          captainAssignments: captainAssignments.length,
           ordersCreated: demoOrders.length,
           orderServicesCreated: demoOrderServices.length,
         },
@@ -458,6 +548,9 @@ export async function GET(req: NextRequest) {
     const categoriesCount = await prisma.serviceCategory.count();
     const ordersCount = await prisma.order.count();
     const orderServicesCount = await prisma.orderService.count();
+    // NEW CODE: Count captains and locations
+    const captainsCount = await prisma.captain.count();
+    const locationsCount = await prisma.location.count();
 
     // Get counts by service - similar to top-services API logic
     const bookingsByService = await prisma.booking.groupBy({
@@ -494,6 +587,27 @@ export async function GET(req: NextRequest) {
     // Sort by bookings count in descending order
     serviceStats.sort((a, b) => b.bookingsCount - a.bookingsCount);
 
+    // NEW CODE: Get top captains by rating
+    const topCaptains = await prisma.captain.findMany({
+      take: 5,
+      orderBy: {
+        rating: "desc"
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+            email: true
+          }
+        },
+        service: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
+
     return NextResponse.json(
       {
         success: true,
@@ -504,7 +618,17 @@ export async function GET(req: NextRequest) {
           totalCategories: categoriesCount,
           totalOrders: ordersCount,
           totalOrderServices: orderServicesCount,
+          totalCaptains: captainsCount,
+          totalLocations: locationsCount,
           topServices: serviceStats.slice(0, 6), // Limit to 6 like the top-services API
+          topCaptains: topCaptains.map(captain => ({
+            id: captain.id,
+            name: captain.user.username,
+            email: captain.user.email,
+            service: captain.service?.name || "No service assigned",
+            rating: captain.rating,
+            experience: captain.experience
+          }))
         },
       },
       { status: 200 }
@@ -531,6 +655,20 @@ export async function DELETE(req: NextRequest) {
     await prisma.booking.deleteMany({});
     await prisma.order.deleteMany({});
     
+    // NEW CODE: Delete captain locations
+    await prisma.location.deleteMany({
+      where: {
+        captainId: { in: demoCaptains.map(c => c.id) },
+      },
+    });
+    
+    // NEW CODE: Delete captains
+    await prisma.captain.deleteMany({
+      where: {
+        id: { in: demoCaptains.map(c => c.id) },
+      },
+    });
+    
     await prisma.service.deleteMany({
       where: {
         id: { in: demoServices.map(s => s.id) },
@@ -543,9 +681,15 @@ export async function DELETE(req: NextRequest) {
       },
     });
     
+    // Delete all demo users including captain users
+    const allUserIds = [
+      ...demoUsers.map(u => u.id),
+      ...demoCaptainUsers.map(u => u.id)
+    ];
+    
     await prisma.user.deleteMany({
       where: {
-        id: { in: demoUsers.map(u => u.id) },
+        id: { in: allUserIds },
       },
     });
 
@@ -568,69 +712,3 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
-
-// import { NextRequest, NextResponse } from "next/server";
-// import prisma from "@/lib/prisma";
-
-// export async function GET(req: NextRequest) {
-//   try {
-//     // Try a single, simple query
-//     const categoryCount = await prisma.serviceCategory.count();
-    
-//     return NextResponse.json(
-//       {
-//         success: true,
-//         message: `Prisma is working! Found ${categoryCount} categories.`
-//       },
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     console.error("Error accessing Prisma:", error);
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "Failed to access database",
-//         error: (error as Error).message,
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
-
-// export async function POST(req: NextRequest) {
-//   try {
-//     console.log("Starting demo data creation...");
-    
-//     // First create a single category to test
-//     console.log("Testing with a single category creation...");
-//     const testCategory = await prisma.serviceCategory.create({
-//       data: {
-//         name: "Test Category",
-//         description: "Test category description"
-//       }
-//     });
-    
-//     console.log("Successfully created test category:", testCategory);
-    
-//     // If that works, proceed with the rest of your seeding logic...
-    
-//     return NextResponse.json(
-//       {
-//         success: true,
-//         message: "Test category created successfully",
-//       },
-//       { status: 201 }
-//     );
-//   } catch (error) {
-//     console.error("Error creating demo data:", error);
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "Failed to create demo data",
-//         error: (error as Error).message,
-//         stack: (error as Error).stack,
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }

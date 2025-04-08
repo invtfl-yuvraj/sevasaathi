@@ -1,3 +1,4 @@
+// @/app/api/auth/[...nextauth]/options.ts
 import { NextAuthOptions, Session, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
@@ -55,6 +56,7 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.username = user.username;
         token.isVerified = user.isVerified;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
@@ -64,6 +66,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email as string;
         session.user.username = token.username as string;
         session.user.isVerified = token.isVerified as boolean;
+        session.user.accessToken = token.accessToken as string;
       }
       return session;
     },
