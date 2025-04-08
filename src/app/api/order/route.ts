@@ -79,3 +79,15 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
     );
   }
 }
+
+// create a basic api to check if the route is working properly
+
+// import { NextResponse } from "next/server";
+// import { ApiResponse } from "@/types/ApiResponse";
+
+// export async function GET(req: Request): Promise<NextResponse<ApiResponse>> {
+//   return NextResponse.json(
+//     { success: true, message: "API is working properly" },
+//     { status: 200 }
+//   );
+// }

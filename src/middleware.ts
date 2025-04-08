@@ -25,12 +25,12 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Matching Paths
-export const config = {
-  matcher: [
-    '/user/:path*',
-  ]
-}
+// // Matching Paths
+// export const config = {
+//   matcher: [
+//     '/user/:path*',
+//   ]
+// }
 
 export const config = {
   matcher: ["/user/:path*", "/user/login", "/user/signup", "/user/dashboard", "/order"],
