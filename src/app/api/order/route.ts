@@ -5,10 +5,10 @@ import { ApiResponse } from "@/types/ApiResponse";
 export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   try {
     const body = await req.json();
-    const { address, date, time, services } = body;
+    const { address, date, time, services, userId } = body;
     console.log("Received data:", body);
 
-    if (!address || !date || !time || !Array.isArray(services)) {
+    if (!address || !date || !time || !Array.isArray(services) || !userId) {
       return NextResponse.json(
         { success: false, message: "Invalid input data" },
         { status: 400 }
@@ -17,22 +17,16 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
 
     console.log(new Date(date));
     
-    let newOrder: any;
     // Step 1: Create a new Order
-    try {
-      newOrder = await prisma.order.create({
-        data: {
-          address: address || "",
-          date: new Date(date),
-          time: time || "",
-          status: "PENDING",
-          userId: "123456",
-        },
-      });
-      console.log("Created Order:", newOrder);
-    } catch (prismaError) {
-      console.error("Prisma Error Creating Order:", prismaError);
-    }
+    const newOrder = await prisma.order.create({
+      data: {
+        address: address || "",
+        date: new Date(date),
+        time: time || "",
+        status: "PENDING",
+        userId: userId,
+      },
+    });
 
     //console.log("New order created:", newOrder);
 
