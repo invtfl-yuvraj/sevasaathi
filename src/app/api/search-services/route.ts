@@ -19,19 +19,34 @@ export async function POST(req: NextRequest) {
     // Search services matching the keyword in name or description
     const services = await prisma.service.findMany({
       where: {
-        name: {
-          contains: keyword,
-          mode: "insensitive",
-        },
+        OR: [
+          {
+            name: {
+              contains: keyword,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: keyword,
+              mode: "insensitive",
+            },
+          },
+        ],
       },
     });
+
+    // Extract unique name suggestions (up to 5)
+    const suggestions = Array.from(
+      new Set(services.map((service) => service.name))
+    ).slice(0, 5);
 
     return NextResponse.json({
       success: true,
       count: services.length,
       keyword,
       data: services,
-      suggestions: [],
+      suggestions,
     });
   } catch (error) {
     console.error("Search Services Error:", error);
