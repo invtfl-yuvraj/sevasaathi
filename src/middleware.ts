@@ -25,6 +25,7 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
+<<<<<<< HEAD
 // // Matching Paths
 // export const config = {
 //   matcher: [
@@ -35,3 +36,11 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: ["/user/:path*", "/user/login", "/user/signup", "/user/dashboard", "/order"],
 };
+=======
+// Matching Paths
+export const config = {
+  matcher: [
+    '/user/:path*',
+  ]
+}
+>>>>>>> d2a5674af42096de2050d2b4694a6a0347d71365
