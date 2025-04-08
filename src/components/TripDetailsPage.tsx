@@ -27,6 +27,7 @@ const TripDetailsPage: React.FC<TripDetailsPageProps> = ({ params }) => {
       try {
         setLoading(true);
         const response = await fetch(`/api/trips/${tripId}`);
+        console.log("Trip response", response);
         
         if (!response.ok) {
           const errorData = await response.json();

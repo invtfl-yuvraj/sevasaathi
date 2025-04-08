@@ -11,6 +11,8 @@ import DashboardFooter from "@/components/DashboardFooter";
 import MostBookedServices from "@/components/MostBookedServices";
 import CaptainTrackingClient from "@/components/CaptainTrackingClient";
 import CaptainLocationTracker from "@/components/CaptainLocationTracker";
+import TripDetailsPage from "@/components/TripDetailsPage";
+import TripLocationMap from "@/components/TripLocationMap";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,6 +65,9 @@ const page = () => {
 
         <CaptainTrackingClient tripId="trip1" userId="2ef8d520-6275-4459-9447-325d154b3ba4"></CaptainTrackingClient>
         <CaptainLocationTracker tripId="trip1"></CaptainLocationTracker>
+
+        <TripDetailsPage params={{ id: "trip1" }}></TripDetailsPage>
+        <TripLocationMap tripId="trip1"></TripLocationMap>
 
         <div className="bg-[#B6B6D6]">
           {/* logo */}

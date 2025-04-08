@@ -28,7 +28,7 @@ const ItemCard = ({ maintitle, subtitle, bg, imageUrl, subtitlecolor }: ItemCard
       
       <div className="flex flex-col gap-1 flex-nowrap max-w-[120px]">
         {/* Service Title with truncation */}
-        <h3 className="font-semibold whitespace-nowrap overflow-hidden text-ellipsis" title={maintitle}>
+        <h3 className="font-semibold max-w-[85px] whitespace-nowrap overflow-scroll scrollbar-hide" title={maintitle}>
           {maintitle}
         </h3>
         <p className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold" style={{ color: subtitlecolor }} title={subtitle}>{subtitle}</p>
