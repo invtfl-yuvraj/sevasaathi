@@ -7,13 +7,8 @@ function page() {
   return (
     <div className="h-screen w-full">
       <div className="flex justify-center items-center py-8">
-        <Image
-          src="/Icon/sevasaathi_logo.png"
-          alt="Logo"
-          height={200}
-          width={200}
-          className="object-cover"
-        />
+      <Image src="/Icon/logo.png" alt="Logo" width={150} height={150} />
+
       </div>
 
       <div className="gap-2 px-6">

@@ -11,6 +11,7 @@ import DashboardFooter from "@/components/DashboardFooter";
 import MostBookedServices from "@/components/MostBookedServices";
 import CaptainTrackingClient from "@/components/CaptainTrackingClient";
 import CaptainLocationTracker from "@/components/CaptainLocationTracker";
+import TopRatedPartners from "@/components/TopPartners";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,7 +45,8 @@ const page = () => {
         </div>
 
         <div className="h-full w-full py-4 px-6 rounded-lg bg-white">
-          <div className="h-full w-full flex items-center gap-2">
+          <TopRatedPartners/>
+          {/* <div className="h-full w-full flex items-center gap-2">
             <div className="h-8 w-1 rounded-xl bg-[#A3B2FF]"></div>
             <h2 className="text-xl font-bold">Our Top Partners</h2>
           </div>
@@ -58,7 +60,7 @@ const page = () => {
           <ItemCard maintitle="Ankit" subtitle="⭐️ 4.80" bg="bg-lightpurple" subtitlecolor={""} />
           <ItemCard maintitle="Anirudh" subtitle="⭐️ 4.79" bg="bg-lightpurple" subtitlecolor={""} />
           <ItemCard maintitle="Himanshu" subtitle="⭐️ 4.78" bg="bg-lightpurple" subtitlecolor={""} />
-          </div>
+          </div> */}
         </div>
 
         <CaptainTrackingClient tripId="trip1" userId="2ef8d520-6275-4459-9447-325d154b3ba4"></CaptainTrackingClient>

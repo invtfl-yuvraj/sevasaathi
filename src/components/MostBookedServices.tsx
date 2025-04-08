@@ -79,6 +79,19 @@ export default function MostBookedServices() {
               bg={getColorForIndex(index)}
               imageUrl="/Icon/ac-repair-image.png"
               subtitlecolor={"#08952C"}
+              captain={{
+                id: "default-id",
+                userId: "default-user-id",
+                serviceId: null,
+                availability: true,
+                experience: 0,
+                hourlyRate: 0,
+                location: "Default Location",
+                rating: 0,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              }} // Provide a default or dynamic value for captain
+              color="#FFFFFF" // Provide a default or dynamic value for color
             />
           ))
         )}

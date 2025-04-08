@@ -26,13 +26,37 @@ const page = () => {
       <HeaderWithBackButton title="AC Services" />
       <div className="h-full w-full flex flex-col justify-between gap-4">
         <hr />
-        <ServiceAddCard id="card1" onItemCountChange={handleItemCountChange} />
+        <ServiceAddCard
+          id="card1"
+          name="Default Service Name 1"
+          description="Default description for Service 1"
+          price={299}
+          onItemCountChange={handleItemCountChange}
+        />
         <hr />
-        <ServiceAddCard id="card2" onItemCountChange={handleItemCountChange} />
+        <ServiceAddCard
+          id="card1"
+          name="Default Service Name 2"
+          description="Default description for Service 1"
+          price={299}
+          onItemCountChange={handleItemCountChange}
+        />
         <hr />
-        <ServiceAddCard id="card3" onItemCountChange={handleItemCountChange} />
+        <ServiceAddCard
+          id="card3"
+          name="Service Name 3"
+          description="Description for Service 3"
+          price={299}
+          onItemCountChange={handleItemCountChange}
+        />
         <hr />
-        <ServiceAddCard id="card4" onItemCountChange={handleItemCountChange} />
+        <ServiceAddCard
+          id="card4"
+          name="Default Service Name 4"
+          description="Default description for Service 4"
+          price={299}
+          onItemCountChange={handleItemCountChange}
+        />
       </div>
       {totalItemCount >0 && (
         <div className="fixed top-0 right-0 left-0 p-4 bg-white shadow-sm z-50 font-bold flex justify-end">
