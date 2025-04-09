@@ -1,9 +1,13 @@
+import { Captain } from "@prisma/client";
+
 interface ItemCardProps {
   maintitle: string;
   subtitle: string;
   bg: string;
   imageUrl?: string; 
   subtitlecolor: string;
+  // captain:Captain;
+  color:string;
 }
 
 const ItemCard = ({ maintitle, subtitle, bg, imageUrl, subtitlecolor }: ItemCardProps) => {
