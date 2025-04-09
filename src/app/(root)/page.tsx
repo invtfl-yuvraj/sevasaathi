@@ -167,7 +167,7 @@ function Page() {
                 onClick={handleGetStarted}
                 style={{ cursor: "pointer", width: "100%", height: "100%" }}
               >
-                <OnBoardingScreen />
+                <OnBoardingScreen imgUrl="/Icon/Page1.png" title="fiRST" subtitle="SUB"/>
               </div>
             ) : currentPage === "findService" ? (
               <div

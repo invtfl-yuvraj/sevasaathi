@@ -1,14 +1,14 @@
-// HomePage.js
+"use client";
+
 import React from "react";
-import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const HomePage = () => {
   const router = useRouter();
 
   const handleGuestContinue = () => {
+    // Using push method with proper path
     router.push("/user/dashboard");
   };
 
@@ -28,7 +28,6 @@ const HomePage = () => {
           xmlns="http://www.w3.org/2000/svg"
           className="absolute top-0 left-0 z-0"
         >
-          {/* Half-visible circle (cut horizontally by the top edge) */}
           <circle cx="0" cy="0" r="60" fill="#FFCACA" />
         </svg>
       </div>
@@ -42,35 +41,61 @@ const HomePage = () => {
             alt=""
             className="bg-cover object-cover"
           />
-          
-          {/* Improved diagonal animated service ribbons */}
+
           <div className="absolute inset-4 flex items-center justify-center mt-32">
-            {/* Container for the diagonal ribbons */}
             <div className="relative w-full h-32">
-              {/* First ribbon (pink) - moving right - with diagonal rotation */}
-              <div className="absolute w-full overflow-hidden" style={{ transform: "rotate(-10deg)", top: "-5px" }}>
+              <div
+                className="absolute w-full overflow-hidden"
+                style={{ transform: "rotate(-10deg)", top: "-5px" }}
+              >
                 <div className="animate-scrollRight whitespace-nowrap flex">
-                  <ScallopedServiceRibbon 
-                    color="#FB9B9B" 
-                    services={["Home", "Cleaning", "Kitchen", "Repair", "Maintenance"]}
+                  <ScallopedServiceRibbon
+                    color="#FB9B9B"
+                    services={[
+                      "Home",
+                      "Cleaning",
+                      "Kitchen",
+                      "Repair",
+                      "Maintenance",
+                    ]}
                   />
-                  <ScallopedServiceRibbon 
-                    color="#FB9B9B" 
-                    services={["Home", "Cleaning", "Kitchen", "Repair", "Maintenance"]}
+                  <ScallopedServiceRibbon
+                    color="#FB9B9B"
+                    services={[
+                      "Home",
+                      "Cleaning",
+                      "Kitchen",
+                      "Repair",
+                      "Maintenance",
+                    ]}
                   />
                 </div>
               </div>
-              
-              {/* Second ribbon (mint) - moving left - with diagonal rotation */}
-              <div className="absolute w-full overflow-hidden" style={{ transform: "rotate(10deg)", top: "35px" }}>
+
+              <div
+                className="absolute w-full overflow-hidden"
+                style={{ transform: "rotate(10deg)", top: "35px" }}
+              >
                 <div className="animate-scrollLeft whitespace-nowrap flex">
-                  <ScallopedServiceRibbon 
-                    color="#C6EFCE" 
-                    services={["Painting", "Cleaning", "Plumbing", "Repair", "Electrical"]}
+                  <ScallopedServiceRibbon
+                    color="#C6EFCE"
+                    services={[
+                      "Painting",
+                      "Cleaning",
+                      "Plumbing",
+                      "Repair",
+                      "Electrical",
+                    ]}
                   />
-                  <ScallopedServiceRibbon 
-                    color="#C6EFCE" 
-                    services={["Painting", "Cleaning", "Plumbing", "Repair", "Electrical"]}
+                  <ScallopedServiceRibbon
+                    color="#C6EFCE"
+                    services={[
+                      "Painting",
+                      "Cleaning",
+                      "Plumbing",
+                      "Repair",
+                      "Electrical",
+                    ]}
                   />
                 </div>
               </div>
@@ -80,22 +105,22 @@ const HomePage = () => {
 
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-2xl font-bold">Professional Home Service</h1>
-
           <h3 className="text-[#535763]">
-            Let us provide you with your professinal experience!
+            Let us provide you with your professional experience!
           </h3>
         </div>
 
         <div className="flex flex-col gap-6 h-full w-[80%] font-semibold text-lg">
-          <button 
+          {/* Using onClick with an inline function to ensure the event is properly captured */}
+          <button
             className="bg-lightpurple text-white p-2 rounded-md"
-            onClick={handleGuestContinue}
+            onClick={() => router.push("/user/dashboard")}
           >
-            Continue As Guest
+            Continue As User
           </button>
-          <button 
+          <button
             className="bg-lightpurple text-white p-2 rounded-md"
-            onClick={handleProfessionalContinue}
+            onClick={() => router.push("/captain/dashboard")}
           >
             Continue As Professional
           </button>
@@ -112,7 +137,7 @@ const HomePage = () => {
             transform: translateX(0%);
           }
         }
-        
+
         @keyframes scrollLeft {
           0% {
             transform: translateX(0%);
@@ -121,11 +146,11 @@ const HomePage = () => {
             transform: translateX(-50%);
           }
         }
-        
+
         .animate-scrollRight {
           animation: scrollRight 20s linear infinite;
         }
-        
+
         .animate-scrollLeft {
           animation: scrollLeft 20s linear infinite;
         }
@@ -134,63 +159,63 @@ const HomePage = () => {
   );
 };
 
-// Scalloped service ribbon that better matches the reference image
 interface ScallopedServiceRibbonProps {
   color: string;
   services: string[];
 }
 
-const ScallopedServiceRibbon: React.FC<ScallopedServiceRibbonProps> = ({ color, services }) => {
+const ScallopedServiceRibbon: React.FC<ScallopedServiceRibbonProps> = ({
+  color,
+  services,
+}) => {
   return (
-    <div className="flex" style={{ minWidth: '100%' }}>
+    <div className="flex" style={{ minWidth: "100%" }}>
       {services.map((service, index) => (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className="relative mx-3 flex items-center justify-center"
-          style={{ height: '40px' }}
+          style={{ height: "40px" }}
         >
-          {/* Main colored tag */}
-          <div 
+          <div
             className="flex items-center justify-center px-8"
-            style={{ 
+            style={{
               backgroundColor: color,
-              height: '100%',
-              position: 'relative',
-              zIndex: 1
+              height: "100%",
+              position: "relative",
+              zIndex: 1,
             }}
           >
-            {/* Text content */}
-            <span className="font-medium text-black whitespace-nowrap">{service}</span>
+            <span className="font-medium text-black whitespace-nowrap">
+              {service}
+            </span>
           </div>
-          
-          {/* Left circular cutout */}
-          <div 
+
+          <div
             className="absolute left-0 top-0 bottom-0 flex items-center justify-center"
-            style={{ transform: 'translateX(-50%)' }}
+            style={{ transform: "translateX(-50%)" }}
           >
-            <div 
+            <div
               className="rounded-full bg-white"
-              style={{ 
-                width: '16px', 
-                height: '16px',
-                boxShadow: '0 0 0 4px ' + color,
-                zIndex: 2
+              style={{
+                width: "16px",
+                height: "16px",
+                boxShadow: "0 0 0 4px " + color,
+                zIndex: 2,
               }}
             ></div>
           </div>
-          
-          {/* Right circular cutout */}
-          <div 
+
+          <div
             className="absolute right-0 top-0 bottom-0 flex items-center justify-center"
-            style={{ transform: 'translateX(50%)' }}
+            style={{ transform: "translateX(50%)" }}
           >
-            <div 
+            <div
               className="rounded-full bg-white"
-              style={{ 
-                width: '16px', 
-                height: '16px',
-                boxShadow: '0 0 0 4px ' + color,
-                zIndex: 2
+              style={{
+                width: "16px",
+                height: "16px",
+                boxShadow: "0 0 0 4px " + color,
+                zIndex: 2,
               }}
             ></div>
           </div>

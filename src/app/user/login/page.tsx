@@ -26,13 +26,12 @@ const LoginPage = () => {
 
     if (errors[name] || errors.api) {
       setErrors((prevState) => {
-      const newState = { ...prevState };
-      delete newState[name];
-      delete newState.api;
-      return newState;
+        const newState = { ...prevState };
+        delete newState[name];
+        delete newState.api;
+        return newState;
       });
     }
-    
   };
 
   const submitHandler = async (e: React.FormEvent) => {
@@ -75,7 +74,7 @@ const LoginPage = () => {
   return (
     <div className="p-7">
       <div className="mt-[20%]">
-        <h2 className="font-semibold text-3xl text-center">Sign In</h2>
+        <h2 className="font-semibold text-3xl text-center">Login Here</h2>
       </div>
 
       <div className="mt-[10%]">
@@ -109,33 +108,32 @@ const LoginPage = () => {
               Enter your Password
             </label>
             <div className="relative">
-            <input
-              required
-              className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg ${
-                errors.password ? "border-2 border-red-500" : ""
-              }`}
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              name="password"
-              id="password"
-              value={loginData.password}
-              onChange={changeHandler}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
-              tabIndex={-1}
-            >
-              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-            </button>
+              <input
+                required
+                className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg ${
+                  errors.password ? "border-2 border-red-500" : ""
+                }`}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                name="password"
+                id="password"
+                value={loginData.password}
+                onChange={changeHandler}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+                tabIndex={-1}
+              >
+                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </button>
             </div>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1"> {errors.password}</p>
             )}
-            
           </div>
-          
+
           {errors.form && (
             <p className="text-red-500 text-sm mt-1 w-full">{errors.form}</p>
           )}

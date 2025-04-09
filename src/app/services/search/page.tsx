@@ -7,6 +7,7 @@ import ServiceAddCard from "@/components/ServiceAddCard";
 import ButtonNavigation from "@/components/ButtonNavigation";
 import Link from "next/link";
 
+
 interface Service {
   id: string;
   name: string;
