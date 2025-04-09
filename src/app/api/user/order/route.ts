@@ -23,7 +23,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
         address: address || "",
         date: new Date(date),
         time: time || "",
-        status: status || "pending",
+        status: status || "PENDING",
         userId: userId,
       },
     });
