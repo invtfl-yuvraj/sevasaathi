@@ -1,21 +1,21 @@
-'use client'
-import { useState, useEffect } from 'react';
-import Loading from './Loading';
-import { useRandomColor } from '@/hooks/useRandomColor';
-import ItemCard from './ItemCard';
+"use client";
+import { useState, useEffect } from "react";
+import Loading from "./Loading";
+import { useRandomColor } from "@/hooks/useRandomColor";
+import ItemCard from "./ItemCard";
 
 interface Captain {
-    id: string,
-    name: string,
-    email: string,
-    service: string,
-    rating: number,
-    experience: string,
+  id: string;
+  name: string;
+  email: string;
+  service: string;
+  rating: number;
+  experience: string;
 }
 
 export default function TopRatedPartners() {
   const { allColors } = useRandomColor();
-  
+
   const [captains, setCaptains] = useState<Captain[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,22 +24,22 @@ export default function TopRatedPartners() {
     const fetchTopCaptains = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/top-partners');
-        
+        const response = await fetch("/api/top-partners");
+
         if (!response.ok) {
-          throw new Error('Failed to fetch top partners');
+          throw new Error("Failed to fetch top partners");
         }
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
           setCaptains(result.data);
         } else {
-          setError(result.message || 'Failed to load partners');
+          setError(result.message || "Failed to load partners");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error('Error fetching top partners:', err);
+        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Error fetching top partners:", err);
       } finally {
         setLoading(false);
       }
@@ -59,7 +59,7 @@ export default function TopRatedPartners() {
         <div className="h-8 w-1 rounded-xl bg-lightpurple"></div>
         <h2 className="text-xl font-bold">Top Partners</h2>
       </div>
-      
+
       <div className="h-full w-full flex gap-4 py-4 overflow-scroll scroll-smooth scrollbar-hide">
         {loading ? (
           <div className="flex justify-center items-center w-full p-4">
