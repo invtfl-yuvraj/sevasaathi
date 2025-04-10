@@ -1,52 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import OnBoardingScreen from "@/components/OnBoardingScreen";
-import Link from "next/link";
 import FindServicePage from "@/components/FindServicePage";
 import BookTheAppointment from "@/components/BookTheAppointment";
 import PaymentGateway from "@/components/PaymentGateway";
 import HomePage from "@/components/HomePage";
-
-
-const Home = () => (
-  <div className="flex flex-col items-center justify-between h-[60vh]">
-    <div>
-      <h1 className="text-3xl font-semibold">Welcome to Seva Saathi</h1>
-    </div>
-    <div className="w-full h-[310px] overflow-hidden">
-      <img
-        className="object-cover"
-        src="https://c8.alamy.com/comp/D36CPK/different-types-of-workers-D36CPK.jpg"
-        alt=""
-      />
-    </div>
-    <div className="w-full flex flex-col items-center justify-center gap-2">
-      <Link href="/user/login" className="px-10"> 
-        <Button
-          variant="outline"
-          className="bg-lightpurple text-white font-semibold px-4"
-        >
-          Continue as User
-        </Button>
-      </Link>
-      <Link href="/captain">
-        <Button
-          variant="outline"
-          className="bg-lightpurple text-white font-semibold"
-        >
-          Continue as Professional
-        </Button>
-      </Link>
-      <Link href="/admin">
-        <Button
-          variant="outline"
-          className="bg-lightred"
-        >
-          Admin's Portal
-        </Button>
-      </Link>
-    </div>
 
 function Page() {
   const [currentPage, setCurrentPage] = useState("onboarding");
@@ -78,7 +36,6 @@ function Page() {
       setCurrentPage("home");
     }
   };
-
 
   // Function to handle the text button click
   const handleTextButtonClick = () => {
