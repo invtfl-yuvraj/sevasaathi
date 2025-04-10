@@ -7,6 +7,7 @@ import { signInValidation } from "@/validations/signInValidation";
 import { ZodError } from "zod";
 import { signIn } from "next-auth/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Image from "next/image";
 
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({
@@ -73,7 +74,10 @@ const LoginPage = () => {
 
   return (
     <div className="p-7">
-      <div className="mt-[20%]">
+      <div className="object-cover flex justify-center items-center">
+        <Image src="/Icon/logo.png" height={200} width={200} alt=""></Image>
+      </div>
+      <div className="">
         <h2 className="font-semibold text-3xl text-center">Login Here</h2>
       </div>
 
@@ -86,7 +90,7 @@ const LoginPage = () => {
             </label>
             <input
               required
-              className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg ${
+              className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg outline-none ${
                 errors.email ? "border-2 border-red-500" : ""
               }`}
               type="email"
@@ -110,7 +114,7 @@ const LoginPage = () => {
             <div className="relative">
               <input
                 required
-                className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg ${
+                className={`w-full px-4 py-2 text-lg bg-[#F5F5F5] placeholder:text-sm border-none rounded-lg outline-none ${
                   errors.password ? "border-2 border-red-500" : ""
                 }`}
                 type={showPassword ? "text" : "password"}

@@ -20,9 +20,9 @@ function OnBoardingScreen({ imgUrl, title, subtitle }: onBoardingProps) {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="text-black text-2xl font-bold">{title}</h2>
+        <h2 className="text-black text-2xl font-bold">Welcome To SevaSathi</h2>
         <p className="text-slate-600">
-          {subtitle}
+          Your one stop destination for all your daily chores!
         </p>
       </div>
     </div>

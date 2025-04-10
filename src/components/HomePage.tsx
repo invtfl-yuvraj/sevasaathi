@@ -32,7 +32,10 @@ const HomePage = () => {
         </svg>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-6 p-2 my-[40%]">
+      <div className="flex flex-col justify-center items-center gap-6 p-2 ">
+        <div className="object-cover flex justify-center items-center">
+                <Image src="/Icon/logo.png" height={200} width={200} alt=""></Image>
+              </div>
         <div className="relative">
           <Image
             src="/Icon/HomePage.png"
