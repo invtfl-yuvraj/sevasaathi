@@ -73,7 +73,7 @@ const CaptainButtonNavigation = () => {
 
       {/* Payment section */}
 
-      <Link href="/captain/payment">
+      <Link href="/captain/payment/payment-history">
         <button className="h-full w-full flex justify-center items-center">
           <LuWallet className="text-gray text-3xl  hover:text-lightpurple transition duration-300" />
           {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}

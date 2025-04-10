@@ -1,90 +1,112 @@
-import React from "react";
-import { IoCameraOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa6";
-import { FaStar } from "react-icons/fa6";
-import { FaAngleRight } from "react-icons/fa6";
-import { GrLocation } from "react-icons/gr";
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { FaRegEye } from "react-icons/fa";
-import { LuPhone } from "react-icons/lu";
-import { GoChecklist } from "react-icons/go";
-function CaptainProfile() {
+// pages/profile.js
+"use client";
+import { useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import {
+  Home,
+  CreditCard,
+  Wallet,
+  ShoppingBag,
+  User,
+  Globe,
+  Moon,
+  Lock,
+  Clock,
+  Edit,
+} from "lucide-react";
+import { CiEdit } from "react-icons/ci";
+import { useRouter } from "next/navigation";
+
+export default function Profile() {
+  const router = useRouter();
+  const [user, setUser] = useState({
+    name: "Harsh Mahajan",
+    phone: "+91 6267634192",
+    servicesDelivered: 259,
+    yearsOfExperience: 5,
+  });
+
+  function EditProfile() {
+    router.push('/profile/edit');
+  }
+
   return (
-    <div className="py-6">
-      {/* Profile photo */}
-      <div className="flex justify-between items-center gap-4">
-        <div className="h-22 w-22 rounded-full border-2 border-violet-400 flex justify-center items-center p-6">
-          <IoCameraOutline className="text-3xl text-gray-500" />
-        </div>
-        {/* Name and Phone Number */}
-        <div className="mt-4">
-          <div className="flex items-center gap-2">
-            <FaRegUser className="text-md  text-lightpurple" />
-            <p className="text-lg font-Inter">Harsh Mahajan</p>
-          </div>
-          <div className="flex items-center gap-2 mt-2">
-            <FaPhone className="text-md text-lightpurple" />
-            <p className="text-md font-Inter ">+91 9999988888</p>
-          </div>
-        </div>
-        {/* Ratings Section (Add content if needed) */}
-        <div className="bg-white rounded-md px-4 py-2 flex items-center gap-1">
-          <p className="text-lg font-semibold">4.9</p>
-          <FaStar className="text-orange-500 text-lg" />
-        </div>
-      </div>
+    <div className="flex flex-col h-screen">
+      <Head>
+        <title>Profile | {user.name}</title>
+        <meta name="description" content="User profile page" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
+      </Head>
 
-      {/* Sections for the div */}
-      <div className="h-full w-full py-10 flex flex-col gap-4">
-        {/* Edit Profile */}
-        <div className="h-full w-full flex justify-between bg-white px-4 py-4 rounded-xl">
-          <div className="flex gap-6">
-            <FaRegUser className="text-lg  text-lightpurple" />
-            <h3>Edit Profile</h3>
+      <div className="flex flex-col">
+        {/* Profile Header */}
+        <div className="bg-[#20004F] p-4   opacity-50">
+          <div className="flex flex-col items-center">
+            <div className="w-40 h-40 opacity-20 bg-[#726686] rounded-full relative">
+              <div className="absolute bottom-1 right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                <Link href="/edit">
+                  <CiEdit className="text-2xl"/>
+                </Link>
+              </div>
+            </div>
+            <h1 className="text-white text-xl font-medium mt-2">{user.name}</h1>
+            <p className="text-white text-sm mt-1">{user.phone}</p>
           </div>
-          <FaAngleRight className="text-lg  text-lightpurple" />
-        </div>
-        {/* Alotted Area */}
-        <div className="h-full w-full flex justify-between bg-white px-4 py-4 rounded-xl">
-          <div className="flex gap-6">
-            <GrLocation className="text-lg  text-lightpurple" />
-            <h3>Allotted Area</h3>
-          </div>
-          <FaAngleRight className="text-lg  text-lightpurple" />
-        </div>
-        {/* Support */}
-        <div className="h-full w-full flex justify-between bg-white px-4 py-4 rounded-xl">
-          <div className="flex gap-6">
-            <LuPhone className="text-lg  text-lightpurple" />
-            <h3>Support</h3>
-          </div>
-          <FaAngleRight className="text-lg  text-lightpurple" />
-        </div>
-        {/* Terms and Conditions */}
-        <div className="h-full w-full flex justify-between bg-white px-4 py-4 rounded-xl">
-          <div className="flex gap-6">
-            <GoChecklist className="text-lg  text-lightpurple" />
-            <h3>Terms & Conditions</h3>
-          </div>
-          <FaAngleRight className="text-lg  text-lightpurple" />
-        </div>
-        {/* Privacy Policy */}
-        <div className="h-full w-full flex justify-between bg-white px-4 py-4 rounded-xl">
-          <div className="flex gap-6">
-            <FaRegEye className="text-lg  text-[#6759FF]" />
-            <h3>Privacy Policy</h3>
-          </div>
-          <FaAngleRight className="text-lg  text-lightpurple" />
         </div>
 
-        <div className="h-full w-full flex gap-6 bg-white px-4 py-4 rounded-lg">
-          <RiLogoutBoxRLine className="text-lg  text-lightpurple" />
-          <h3>Logout</h3>
+        {/* Stats */}
+        <div className="p-6">
+          <div className="bg-white ">
+            <div className="flex justify-around bg-lightgray p-4">
+              <div className="text-center">
+                <p className="text-lightpurple font-bold text-2xl">
+                  {user.servicesDelivered}+
+                </p>
+                <p className="text-gray text-base">
+                  Service
+                  <br />
+                  Delivered
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-lightpurple font-bold text-2xl">
+                  0{user.yearsOfExperience} +
+                </p>
+                <p className="text-gray text-base">
+                  Years of
+                  <br />
+                  Experience
+                </p>
+              </div>
+            </div>
+            {/* Settings */}
+            <div className="py-6">
+              <div className="p-4 flex items-center border-b border-gray-100 gap-2">
+                <Globe size={20} className="text-gray" />
+                <span className="text-black text-lg">App Language</span>
+              </div>
+              <div className="p-4 flex items-center border-b border-gray-100 gap-2">
+                <Moon size={20} className="text-black-600" />
+                <span className="text-black text-lg">Set Offline Status</span>
+              </div>
+              <div className="p-4 flex items-center border-b border-gray-100 gap-2">
+                <Lock size={20} className="text-black-600" />
+                <span className="text-black text-lg">Change PIN</span>
+              </div>
+              <div className="p-4 flex items-center border-b border-gray-100 gap-2">
+                <Clock size={20} className="text-black-600" />
+                <span className="text-black text-lg">Payment History</span>
+              </div>
+            </div>
+        </div>
+
+          {/* Logout */}
+          <div className="flex justify-center items-center">
+            <button className="text-purple text-xl">Logout</button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default CaptainProfile;
