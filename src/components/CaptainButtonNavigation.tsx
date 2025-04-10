@@ -3,9 +3,10 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRef } from "react";
 import { TbHome, TbHomeFilled } from "react-icons/tb";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { LuWallet } from "react-icons/lu";
 import { GrLocation } from "react-icons/gr";
+import { HiOutlineTicket } from "react-icons/hi";
+import { LuShoppingBag } from "react-icons/lu";
 
 import {
   MdChat,
@@ -55,10 +56,18 @@ const CaptainButtonNavigation = () => {
     >
       {/* Home section */}
 
+      <Link href="/captain/dashboard">
+        <button className="h-full w-full flex justify-center items-center">
+          {/* <TbHome className="text-gray-400 text-3xl" /> */}
+          <TbHomeFilled className="text-gray text-3xl hover:text-lightpurple transition duration-300" />
+        </button>
+      </Link>
+
+      {/* Ticket section */}
       <Link href="">
         <button className="h-full w-full flex justify-center items-center">
           {/* <TbHome className="text-gray-400 text-3xl" /> */}
-          <TbHomeFilled className="text-gray-400 text-3xl hover:text-lightpurple transition duration-300" />
+          <HiOutlineTicket className="text-gray text-3xl hover:text-lightpurple transition duration-300" />
         </button>
       </Link>
 
@@ -66,7 +75,7 @@ const CaptainButtonNavigation = () => {
 
       <Link href="/captain/payment">
         <button className="h-full w-full flex justify-center items-center">
-          <LuWallet className="text-gray-400 text-3xl  hover:text-lightpurple transition duration-300" />
+          <LuWallet className="text-gray text-3xl  hover:text-lightpurple transition duration-300" />
           {/* <RiFileList3Fill className="text-lightpurple text-3xl" />  */}
         </button>
       </Link>
@@ -74,7 +83,7 @@ const CaptainButtonNavigation = () => {
       {/* Notification section */}
       <Link href="/captain/shop">
         <button className="h-full w-full flex justify-center items-center">
-          <HiOutlineShoppingBag className="text-gray-400 text-3xl" />
+          <LuShoppingBag className="text-gray text-3xl " />
           {/* <VscBellDot className="text-lightpurple text-3xl"/> */}
         </button>
       </Link>
@@ -91,7 +100,7 @@ const CaptainButtonNavigation = () => {
       {/* User section */}
       <Link href="/captain/profile">
         <button className="h-full w-full flex justify-center items-center">
-          <FaRegCircleUser className="text-gray-400 text-3xl" />
+          <FaRegCircleUser className="text-gray text-3xl" />
           {/* <FaCircleUser className="text-lightpurple text-3xl" /> */}
         </button>
       </Link>

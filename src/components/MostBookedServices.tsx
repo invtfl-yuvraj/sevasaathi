@@ -77,8 +77,9 @@ export default function MostBookedServices() {
               maintitle={service.name}
               subtitle={`₹${service.price || '500'}`}
               bg={getColorForIndex(index)}
-              imageUrl="/Icon/ac-repair-image.png"
+              imageUrl="/Icon/ac-repair-image.png" 
               subtitlecolor={"#08952C"}
+              color="#FFFFFF" // Provide a default or dynamic value for color
             />
           ))
         )}

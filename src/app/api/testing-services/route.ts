@@ -29,51 +29,51 @@ const demoServices = [
     name: "Electrician",
     description: "Handles all types of electrical repairs",
     serviceCategoryId: "cat-001", // Direct reference to category
-    amount: 80.00,
+    amount: 80.0,
   },
   {
     id: "svc-002",
     name: "Plumber",
     description: "Fixes leaks and installs piping",
     serviceCategoryId: "cat-001", // Direct reference to category
-    amount: 90.00,
+    amount: 90.0,
   },
   {
     id: "svc-003",
     name: "AC Repair",
     description: "Air conditioning service and maintenance",
     serviceCategoryId: "cat-001", // Direct reference to category
-    amount: 120.00,
+    amount: 120.0,
   },
   {
     id: "svc-004",
     name: "Cleaning",
     description: "Home cleaning and sanitation",
     serviceCategoryId: "cat-001", // Direct reference to category
-    amount: 60.00,
+    amount: 60.0,
   },
   {
     id: "svc-005",
     name: "Gardening",
     description: "Lawn and garden maintenance",
     serviceCategoryId: "cat-002", // Direct reference to category
-    amount: 70.00,
+    amount: 70.0,
   },
   {
     id: "svc-006",
     name: "Water filter repair",
     description: "Water filter maintenance and repair",
     serviceCategoryId: "cat-003", // Direct reference to category
-    amount: 50.00,
+    amount: 50.0,
   },
 ];
 
 // Demo users data
 const demoUsers = [
-  { 
-    id: "user-001", 
+  {
+    id: "user-001",
     username: "johndoe",
-    email: "john@example.com", 
+    email: "john@example.com",
     password: "password123",
     phone: "+11234567890",
     age: 32,
@@ -81,12 +81,12 @@ const demoUsers = [
     zipcode: "10001",
     state: "NY",
     country: "USA",
-    isVerified: true
+    isVerified: true,
   },
-  { 
-    id: "user-002", 
+  {
+    id: "user-002",
     username: "janesmith",
-    email: "jane@example.com", 
+    email: "jane@example.com",
     password: "password123",
     phone: "+11234567891",
     age: 28,
@@ -106,13 +106,13 @@ for (let i = 10; i < 60; i++) {
     username: `user${i}`,
     email: `user${i}@example.com`,
     password: "password123",
-    phone: `+12345${i.toString().padStart(5, '0')}`,
+    phone: `+12345${i.toString().padStart(5, "0")}`,
     age: 25 + (i % 25),
     address: `${i} Sample St`,
     zipcode: `${10000 + i}`,
     state: "NY",
     country: "USA",
-    isVerified: true
+    isVerified: true,
   });
 }
 
@@ -251,7 +251,7 @@ const baseBookings = [
     userId: "user-001",
     serviceId: "svc-001", // Electrician
     status: BookingStatus.COMPLETED,
-    amount: 120.00,
+    amount: 120.0,
     scheduledAt: new Date(2025, 3, 1, 10, 0), // April 1, 2025, 10:00 AM
     completedAt: new Date(2025, 3, 1, 11, 30), // April 1, 2025, 11:30 AM
   },
@@ -329,10 +329,12 @@ for (let i = 0; i < 3; i++) {
 const demoOrders = baseBookings.map((booking, index) => ({
   id: `order-${index + 1}`,
   userId: booking.userId,
-  address: demoUsers.find(user => user.id === booking.userId)?.address || "Default Address",
+  address:
+    demoUsers.find((user) => user.id === booking.userId)?.address ||
+    "Default Address",
   date: booking.scheduledAt,
-  time: `${booking.scheduledAt.getHours()}:${booking.scheduledAt.getMinutes().toString().padStart(2, '0')}`,
-  status: OrderStatus.COMPLETED
+  time: `${booking.scheduledAt.getHours()}:${booking.scheduledAt.getMinutes().toString().padStart(2, "0")}`,
+  status: OrderStatus.COMPLETED,
 }));
 
 // Add orderIds to bookings but don't modify the objects directly
@@ -367,7 +369,7 @@ const demoOrderServices = demoOrders.map((order, index) => {
     serviceId: booking.serviceId || "svc-001",
     orderId: order.id,
     units: 1,
-    cost: booking.amount
+    cost: booking.amount,
   };
 });
 
@@ -390,12 +392,12 @@ export async function POST(req: NextRequest) {
       const hashedPassword = await hash(user.password, 10);
       return {
         ...user,
-        password: hashedPassword
+        password: hashedPassword,
       };
     });
-    
+
     const usersWithHashedPasswords = await Promise.all(hashedPasswordPromises);
-    
+
     // Create users with upsert to prevent duplicates
     await prisma.$transaction(
       usersWithHashedPasswords.map((user) =>
@@ -559,7 +561,7 @@ export async function GET(req: NextRequest) {
         serviceId: { not: null },
       },
       _count: {
-        serviceId: true,  // This creates _count.serviceId in the result
+        serviceId: true, // This creates _count.serviceId in the result
       },
       orderBy: {
         _count: {
@@ -569,18 +571,18 @@ export async function GET(req: NextRequest) {
     });
 
     const servicesData = await prisma.service.findMany();
-    
+
     // Fix: Access _count correctly from the groupBy result
     const serviceStats = bookingsByService.map((item) => {
       // Find the service info
       const service = servicesData.find((s) => s.id === item.serviceId);
-      
+
       // Return the formatted object
       return {
         id: item.serviceId,
         name: service?.name || "Unknown Service",
         description: service?.description || "Service details not found",
-        bookingsCount: item._count.serviceId,  // This is the correct way to access the count
+        bookingsCount: item._count.serviceId, // This is the correct way to access the count
       };
     });
 
@@ -671,13 +673,13 @@ export async function DELETE(req: NextRequest) {
     
     await prisma.service.deleteMany({
       where: {
-        id: { in: demoServices.map(s => s.id) },
+        id: { in: demoServices.map((s) => s.id) },
       },
     });
-    
+
     await prisma.serviceCategory.deleteMany({
       where: {
-        id: { in: demoCategories.map(c => c.id) },
+        id: { in: demoCategories.map((c) => c.id) },
       },
     });
     
