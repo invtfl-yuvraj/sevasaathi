@@ -1,3 +1,5 @@
+// this api dislays all the booking available with status "PENDING" on the worker page
+
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { ApiResponse } from "@/types/ApiResponse";
