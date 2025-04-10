@@ -7,6 +7,7 @@ import { signUpValidation } from "@/validations/signUpValidation";
 import { ZodError } from "zod";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 
 interface SignupProps {
   profession: "User" | "Captain";
@@ -136,8 +137,11 @@ const SignUpPage: React.FC<SignupProps> = ({ profession }) => {
 
   return (
     <div className="p-6">
+      <div className="object-cover flex justify-center items-center">
+        <Image src="/Icon/logo.png" height={200} width={200} alt=""></Image>
+      </div>
       <div>
-        <h2 className="text-2xl font-semibold tracking-wide text-center mt-[10%]">
+        <h2 className="text-2xl font-semibold tracking-wide text-center">
           Create New {profession} Account
         </h2>
       </div>
