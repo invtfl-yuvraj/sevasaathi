@@ -27,10 +27,6 @@ export default function Profile() {
     yearsOfExperience: 5,
   });
 
-  function EditProfile() {
-    router.push('/profile/edit');
-  }
-
   return (
     <div className="flex flex-col h-screen">
       <Head>
@@ -41,12 +37,12 @@ export default function Profile() {
 
       <div className="flex flex-col">
         {/* Profile Header */}
-        <div className="bg-[#20004F] p-4   opacity-50">
+        <div className="bg-[#20004F] p-4 opacity-50">
           <div className="flex flex-col items-center">
             <div className="w-40 h-40 opacity-20 bg-[#726686] rounded-full relative">
               <div className="absolute bottom-1 right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                <Link href="/edit">
-                  <CiEdit className="text-2xl"/>
+                <Link href="profile/edit">
+                  <CiEdit className="text-2xl" />
                 </Link>
               </div>
             </div>
@@ -99,7 +95,7 @@ export default function Profile() {
                 <span className="text-black text-lg">Payment History</span>
               </div>
             </div>
-        </div>
+          </div>
 
           {/* Logout */}
           <div className="flex justify-center items-center">

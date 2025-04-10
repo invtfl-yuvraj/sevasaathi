@@ -40,11 +40,11 @@ export default function EditProfile() {
       <div>
         <form className="flex flex-col gap-6">
           {/* first name */}
-          <div className="h-full w-full flex justify-between items-center bg-slate-100 rounded-xl gap-2 p-2">
+          <div className="h-full w-full flex justify-between items-center bg-slate-100 rounded-xl gap-2 p-2 ">
             <input
               type="text"
               placeholder="Full Name"
-              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl"
+              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl outline-none"
             />
             <FaRegUser />
           </div>
@@ -54,7 +54,7 @@ export default function EditProfile() {
             <input
               type="text"
               placeholder="Last Name"
-              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl"
+              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl outline-none"
             />
             <FaRegUser />
           </div>
@@ -65,7 +65,7 @@ export default function EditProfile() {
             <input
               type="email"
               placeholder="Email"
-              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl"
+              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl outline-none"
             />
             <MdMailOutline />
           </div>
@@ -76,14 +76,14 @@ export default function EditProfile() {
             <input
               type="text"
               placeholder="Phone Number"
-              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl"
+              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl outline-none"
             />
             <FiPhone className="text-lg" />
           </div>
 
           {/* city and state */}
           <div className="">
-           <StateCityDropdown/>
+            <StateCityDropdown />
           </div>
 
           {/* address */}
@@ -91,7 +91,7 @@ export default function EditProfile() {
             <input
               type="text"
               placeholder="Address"
-              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl"
+              className="bg-slate-100 h-full w-full p-2 tracking-wide text-gray text-xl outline-none"
             />
             <GrLocation className="text-lg" />
           </div>

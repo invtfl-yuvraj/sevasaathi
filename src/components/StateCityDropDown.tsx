@@ -34,7 +34,7 @@ function StateCityDropdown() {
       <select
         value={selectedState}
         onChange={handleStateChange}
-        className="border rounded-lg p-4 w-full bg-slate-200"
+        className="border rounded-lg p-4 w-full bg-slate-200 outline-none"
       >
         <option value="">Select State</option>
         {Object.keys(stateCityData).map((state) => (
@@ -48,7 +48,7 @@ function StateCityDropdown() {
       <select
         value={selectedCity}
         onChange={handleCityChange}
-        className="border rounded-lg p-4 w-full bg-slate-200"
+        className="border rounded-lg p-4 w-full bg-slate-200 outline-none"
         disabled={!selectedState}
       >
         <option value="">Select City</option>
