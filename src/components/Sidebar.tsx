@@ -9,10 +9,10 @@ import { FaPhone } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import Image from "next/image";
 
-interface SidebarProps  {
+interface SidebarProps {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
-};
+}
 
 const Sidebar: React.FC<SidebarProps> = ({ isVisible, setIsVisible }) => {
   return (
@@ -34,7 +34,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, setIsVisible }) => {
         {/* Profile Section */}
         <div className="flex items-center gap-3 mt-4">
           <div className="rounded-full h-16 w-16 border-2 border-white bg-gray-300">
-            <Image  src="" alt="" />
+            <Image
+              src="https://static.vecteezy.com/system/resources/thumbnails/004/607/791/small_2x/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy-human-psychological-portrait-positive-emotions-user-avatar-for-app-web-design-vector.jpg"
+              alt="User Avatar"
+              objectFit="cover"
+              height={80}
+              width={80}
+              className="rounded-full"
+            />
           </div>
           <div>
             <h3 className="text-lg font-semibold">Harsh Mahajan</h3>

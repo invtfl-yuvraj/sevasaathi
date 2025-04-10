@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
 
-
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: ["previews.123rf.com"], 
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "previews.123rf.com",
+      },
+      {
+        protocol: "https",
+        hostname: "static.vecteezy.com",
+      },
+    ],
   },
 };
 

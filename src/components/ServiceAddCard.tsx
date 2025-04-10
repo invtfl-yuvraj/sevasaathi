@@ -5,6 +5,9 @@ import Image from "next/image";
 
 interface ServiceAddCardProps {
   id: string;
+  name: string; // Added the missing 'name' property
+  description: string;
+  price: number;
   onItemCountChange: (id: string, count: number) => void;
 }
 

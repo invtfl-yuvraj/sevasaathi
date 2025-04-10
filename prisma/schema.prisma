@@ -14,33 +14,38 @@ datasource db {
 }
 
 model User {
-  id               String   @id @default(uuid())
+  id               String    @id @default(uuid())
   username         String
-  email            String   @unique
+  email            String    @unique
   age              Int?
   password         String
-  phone            String?  @unique
+  phone            String?   @unique
   imageURL         String?
   address          String?
   zipcode          String?
+  city             String?
   state            String?
   country          String?
-  rating           Float    @default(0)
-  role             Role     @default(USER)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  rating           Float     @default(0)
+  role             Role      @default(USER)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
   verifyCode       String?
   verifyCodeExpiry DateTime?
-  isVerified       Boolean  @default(false)
+  isVerified       Boolean   @default(false)
 
   // Relations
-  captains         Captain[]
+  captain          Captain?
   admin            Admin?
   bookings         Booking[]
   ratings          Rating[]
   payments         Payment[]
-  sentMessages     Message[] @relation("SentMessages")
-  receivedMessages Message[] @relation("ReceivedMessages")
+  sentMessages     Message[]          @relation("SentMessages")
+  receivedMessages Message[]          @relation("ReceivedMessages")
+  orders           Order[]
+  userTrips        Trip[]             @relation("UserTrips")
+  captainTrips     Trip[]             @relation("CaptainTrips")
+  locationHistory  LocationTracking[]
 }
 
 model Captain {
@@ -75,23 +80,69 @@ model Admin {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Service {
+model ServiceCategory {
   id          String   @id @default(uuid())
   name        String   @unique
   description String
+  imageURL    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Relations
-  captains Captain[]
-  bookings Booking[]
+  services Service[]
+}
+
+model Service {
+  id                String          @id @default(uuid())
+  name              String          @unique
+  description       String
+  serviceCategoryId String
+  amount            Float           @default(0)
+  imageURL          String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  // Relations
+  serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id], onDelete: Cascade)
+  captains          Captain[]
+  orderServices     OrderService[]
+}
+
+
+model Order {
+  id           String      @id @default(uuid())
+  userId       String
+  address      String
+  date         DateTime
+  time         String
+  status       OrderStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderServices OrderService[]
+  booking      Booking?      
+  trip         Trip?
+}
+
+model OrderService {
+  id        String  @id @default(uuid())
+  serviceId String
+  orderId   String  
+  units     Int
+  cost      Float
+
+  // Relations
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
   id          String        @id @default(uuid())
   userId      String
-  CaptainId   String?
-  serviceId   String?
+  captainId   String?
+  orderId     String        @unique
   status      BookingStatus @default(PENDING)
   amount      Float
   paymentId   String?
@@ -100,10 +151,26 @@ model Booking {
   createdAt   DateTime      @default(now())
 
   // Relations
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Captain Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
-  service Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
-  payment Payment?
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  captain     Captain?      @relation(fields: [captainId], references: [id], onDelete: SetNull)
+  payment     Payment?
+  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  trip        Trip?
+}
+
+
+enum OrderStatus {
+  PENDING
+  BOOKED
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
 }
 
 model Payment {
@@ -116,59 +183,112 @@ model Payment {
   createdAt     DateTime      @default(now())
 
   // Relations
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
+
 
 model Rating {
   id        String   @id @default(uuid())
   userId    String
-  CaptainId String
+  captainId String   
   rating    Float
   review    String?
   createdAt DateTime @default(now())
 
   // Relations
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Captain Captain @relation(fields: [CaptainId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  captain   Captain  @relation(fields: [captainId], references: [id], onDelete: Cascade)
 }
 
 model Location {
   id        String   @id @default(uuid())
-  CaptainId String   @unique
+  captainId String   @unique  
   latitude  Float
   longitude Float
+  city      String?
   updatedAt DateTime @updatedAt
 
   // Relations
-  Captain Captain @relation(fields: [CaptainId], references: [id], onDelete: Cascade)
+  captain   Captain  @relation(fields: [captainId], references: [id], onDelete: Cascade)
+}
+
+model Trip {
+  id                 String     @id @default(uuid())
+  userId             String
+  captainId          String?   
+  status             TripStatus @default(PENDING)
+  captainLatitude    Float?
+  captainLongitude   Float?
+  distanceToUser     Float?     // Current distance in km
+  lastLocationUpdate DateTime?
+  pickupAddress      String?
+  dropoffAddress     String?
+  pickupLatitude     Float?    
+  pickupLongitude    Float?    
+  startedAt          DateTime?
+  completedAt        DateTime?
+  orderId            String?    @unique
+  bookingId          String?    @unique
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  // Relations
+  user              User        @relation("UserTrips", fields: [userId], references: [id])
+  captain           User?       @relation("CaptainTrips", fields: [captainId], references: [id])
+  order             Order?      @relation(fields: [orderId], references: [id])
+  booking           Booking?    @relation(fields: [bookingId], references: [id])
+  locationHistory   LocationTracking[]
+
+  @@index([userId])
+  @@index([captainId])
+  @@index([status])
+}
+
+model LocationTracking {
+  id             String   @id @default(uuid())
+  tripId         String
+  userId         String
+  latitude       Float
+  longitude      Float
+  distanceToUser Float    // Distance to user in km at this point
+  createdAt      DateTime @default(now())
+
+  // Relations
+  trip           Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+  @@index([userId])
+}
+
+enum TripStatus {
+  PENDING
+  ACCEPTED
+  IN_PROGRESS
+  ARRIVED
+  COMPLETED
+  CANCELLED
 }
 
 model Message {
   id         String   @id @default(uuid())
   senderId   String
   receiverId String
-  CaptainId  String?
+  captainId  String?  
   content    String
   createdAt  DateTime @default(now())
 
   // Relations
-  sender   User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
-  Captain  Captain? @relation(fields: [CaptainId], references: [id], onDelete: SetNull)
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  captain    Captain? @relation(fields: [captainId], references: [id], onDelete: SetNull)
 }
 
 enum Role {
   USER
   CAPTAIN
   ADMIN
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  COMPLETED
-  CANCELED
 }
 
 enum PaymentStatus {
